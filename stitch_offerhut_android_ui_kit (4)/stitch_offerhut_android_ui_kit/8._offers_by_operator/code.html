@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#f8f9ff;}body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-error": "#ffffff", "outline-variant": "#c5c5d3", "on-primary-fixed-variant": "#264191", "surface-tint": "#4059aa", "surface-container-low": "#eff4ff", "surface": "#f8f9ff", "on-primary-container": "#90a8ff", "secondary": "#9d4300", "surface-container-highest": "#d3e4fe", "on-tertiary-fixed": "#002109", "on-secondary-fixed-variant": "#783200", "outline": "#757682", "on-secondary-fixed": "#341100", "on-error-container": "#93000a", "surface-variant": "#d3e4fe", "on-surface-variant": "#444651", "on-surface": "#0b1c30", "error-container": "#ffdad6", "secondary-fixed-dim": "#ffb690", "on-tertiary-container": "#44c365", "primary-container": "#1e3a8a", "secondary-container": "#fd761a", "on-tertiary": "#ffffff", "on-primary-fixed": "#00164e", "primary-fixed-dim": "#b6c4ff", "on-tertiary-fixed-variant": "#005320", "secondary-fixed": "#ffdbca", "background": "#f8f9ff", "on-secondary-container": "#5c2400", "inverse-primary": "#b6c4ff", "tertiary-container": "#004b1d", "surface-container-high": "#dce9ff", "on-secondary": "#ffffff", "inverse-on-surface": "#eaf1ff", "surface-container": "#e5eeff", "primary": "#00236f", "tertiary": "#003211", "surface-container-lowest": "#ffffff", "surface-bright": "#f8f9ff", "inverse-surface": "#213145", "tertiary-fixed-dim": "#62df7d", "on-background": "#0b1c30", "on-primary": "#ffffff", "surface-dim": "#cbdbf5", "primary-fixed": "#dce1ff", "error": "#ba1a1a", "tertiary-fixed": "#7ffc97" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter": "1rem", "space-xs": "0.25rem", "space-xl": "1.25rem", "space-md": "0.75rem", "space-lg": "1rem", "margin": "1rem", "space-sm": "0.5rem" }, "fontFamily": { "label-md": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "title-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"] }, "fontSize": { "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }], "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "800" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "title-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "label-sm": ["10px", { "lineHeight": "14px", "fontWeight": "700" }], "title-md": ["16px", { "lineHeight": "22px", "fontWeight": "600" }], "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "700" }], "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm min-w-0"><button aria-label="Go Back" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container active:bg-surface-container-high transition-colors shrink-0" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Brand logo. - Primary color: #1e3a8a
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+" class="h-7 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1UaYqgURecux7jwEGjL0OAa8nS7fvrrsSCUUvpDSzCxkz3W9Ye2k_TGylkxkhw5GJ-f6QvMQTJMLJ4_y95wChGpeYr3TRDTEdUL0GIKTIJ9AIH_HI8sVAhP7T1jkSq08SJWz4if-guFnBQo8-Cl7LxhDFbydrcbDBrmjrD4QVie1F3x0E2Xlq6YJfnU2XGqxFemJ5XapKqaA6qQ1iJAzip3Wexh45fxPVqCBelrsgClNga1B9YVyMU9FUo"/><h1 class="font-title-lg text-title-lg text-on-surface font-semibold truncate">Offers By Operator</h1></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Filter and Sort" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container active:bg-surface-container-high transition-colors" type="button"><span class="material-symbols-outlined text-[24px]">tune</span></button><div class="w-11 h-11 flex items-center justify-center shrink-0"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WSnF0u-Ehut96YnqSru_n7-NodH0H3E_Oqn9h4dkPYOXyR5vUkZUNSjbHRDzDGYu4RNp6rUSSVdkpVW7l4GamSC5qQEjIPMA3Tn4PdLT86PHUlLaY4AkLWIW6a3D1Gg1SSemTLTBOttWBO883x5ScM3ORFwQtUcYEhh80yRmzTBUxNpXkHOEQXAdHmtAWL-oSUe_8N6bNXiFvewnuhwNeHZeDOz4Xx-MXqlejbor3DwTLL6IxGToiuHzA"/></div></div></div></header><main class="flex-1 w-full bg-surface pt-16 pb-safe relative"><div class="flex flex-col w-full pb-24">
+<!-- Interactive Filter & Quick Search Bar -->
+<section class="px-gutter pt-3 pb-2">
+<div class="relative flex items-center w-full">
+<span class="material-symbols-outlined absolute left-3.5 text-on-surface-variant/70 text-[20px]">search</span>
+<input class="w-full h-11 pl-10 pr-10 rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-[0_2px_8px_-2px_rgba(30,58,138,0.06)] focus:outline-none focus:bg-surface-container-low transition-all placeholder:text-outline" placeholder="Search GP data, minutes, or ৳ amount..." type="text"/>
+<button aria-label="Toggle Quick Sort" class="absolute right-1.5 h-8 px-2.5 flex items-center gap-1 rounded-lg bg-surface-container text-primary text-label-sm font-label-sm active:scale-95 transition-transform" id="sort-trigger" type="button">
+<span class="material-symbols-outlined text-[16px]">swap_vert</span>
+<span>Sort</span>
+</button>
+</div>
+<!-- Collapsible Sort Options Strip -->
+<div class="hidden flex-wrap items-center gap-2 pt-2.5 pb-1" id="sort-drawer">
+<button class="px-3 py-1 rounded-full bg-primary-container text-on-primary font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check</span> Lowest Price
+      </button>
+<button class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm hover:bg-surface-container-highest">
+        Max Data Volume
+      </button>
+<button class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm hover:bg-surface-container-highest">
+        Longest Validity
+      </button>
+</div>
+</section>
+<!-- Operator Header Showcase Card -->
+<section class="px-gutter py-2">
+<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-container via-[#152e75] to-[#0d1d4d] text-on-primary p-4 shadow-[0_4px_20px_-4px_rgba(30,58,138,0.25)]">
+<!-- Decorative Operator Glow -->
+<div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-surface-tint/20 blur-2xl pointer-events-none"></div>
+<div class="relative flex items-center justify-between">
+<div class="flex items-center gap-3">
+<!-- Operator Brand Icon Tile -->
+<div class="w-12 h-12 rounded-xl bg-surface-container-lowest flex items-center justify-center p-2 shadow-sm shrink-0">
+<svg class="w-full h-full" fill="none" viewbox="0 0 100 100">
+<path d="M15 50 C15 25, 40 12, 70 20 C60 38, 45 42, 38 60 C32 74, 40 85, 52 88 C30 92, 15 75, 15 50 Z" fill="#009fe3"></path>
+<path d="M85 50 C85 75, 60 88, 30 80 C40 62, 55 58, 62 40 C68 26, 60 15, 48 12 C70 8, 85 25, 85 50 Z" fill="#0077c8"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-primary font-bold tracking-tight">Grameenphone</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary-fixed" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-body-sm text-body-sm text-surface-container-high/80">68 Verified Packs Available</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest/15 backdrop-blur-md text-surface-container-lowest text-label-sm font-label-sm">
+            Speed 4.5G+
+          </span>
+</div>
+</div>
+<!-- Category Filter Chips inside Banner -->
+<div class="flex items-center gap-2 mt-4 overflow-x-auto no-scrollbar -mx-1 px-1">
+<button class="h-8 px-3.5 rounded-full bg-surface-container-lowest text-primary font-label-md text-label-md whitespace-nowrap shadow-sm">
+          All (68)
+        </button>
+<button class="h-8 px-3.5 rounded-full bg-surface-container-lowest/20 hover:bg-surface-container-lowest/30 text-surface-container-lowest font-label-md text-label-md whitespace-nowrap backdrop-blur-sm transition-colors">
+          Internet (34)
+        </button>
+<button class="h-8 px-3.5 rounded-full bg-surface-container-lowest/20 hover:bg-surface-container-lowest/30 text-surface-container-lowest font-label-md text-label-md whitespace-nowrap backdrop-blur-sm transition-colors">
+          Combo (22)
+        </button>
+<button class="h-8 px-3.5 rounded-full bg-surface-container-lowest/20 hover:bg-surface-container-lowest/30 text-surface-container-lowest font-label-md text-label-md whitespace-nowrap backdrop-blur-sm transition-colors">
+          Minutes (12)
+        </button>
+</div>
+</div>
+</section>
+<!-- Offers Feed Section -->
+<section class="px-gutter pt-2 flex flex-col gap-3">
+<!-- CARD 1: Featured Best Value -->
+<article class="relative bg-surface-container-lowest rounded-2xl p-4 shadow-[0_4px_16px_-2px_rgba(30,58,138,0.08)] flex flex-col gap-3 group">
+<!-- Highlight Ribbon -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="px-2.5 py-0.5 rounded-md bg-secondary-container text-on-secondary-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+            Most Popular
+          </span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container-highest text-primary font-label-sm text-label-sm">
+            GP 4G/5G
+          </span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary-container/10 text-on-tertiary-container font-label-sm text-label-sm font-bold">
+          ⚡ ৳45 Cashback
+        </span>
+</div>
+<!-- Core Pack Info -->
+<div class="flex items-start justify-between gap-2">
+<div class="flex-1 min-w-0">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate">50 GB + 800 Mins</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline">check_circle</span>
+            Any Net Mins • Bonus 5GB 4G Data
+          </p>
+</div>
+<div class="text-right shrink-0">
+<span class="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">৳498</span>
+<span class="block font-label-sm text-label-sm text-outline uppercase tracking-wider">30 Days</span>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="flex items-center justify-between pt-1 gap-2">
+<div class="flex items-center gap-1 text-on-tertiary-container text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span>Instant recharge</span>
+</div>
+<button class="h-10 px-4 rounded-xl bg-secondary-container text-on-secondary-container font-label-md text-label-md flex items-center gap-1 active:scale-[0.98] transition-transform shadow-sm" onclick="triggerOfferSheet('50 GB + 800 Mins', '498')" type="button">
+<span>View Details</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</article>
+<!-- CARD 2: Heavy Data Pack -->
+<article class="relative bg-surface-container-lowest rounded-2xl p-4 shadow-[0_2px_8px_-2px_rgba(30,58,138,0.06)] flex flex-col gap-3 group">
+<div class="flex items-center justify-between">
+<span class="px-2 py-0.5 rounded-md bg-surface-container-highest text-primary font-label-sm text-label-sm font-bold">
+          GP Data Pro
+        </span>
+<span class="font-label-sm text-label-sm text-outline">
+          Standard Rate
+        </span>
+</div>
+<div class="flex items-start justify-between gap-2">
+<div class="flex-1 min-w-0">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate">25 GB Super Data</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline">speed</span>
+            Valid for all networks • 0 auto-renewal
+          </p>
+</div>
+<div class="text-right shrink-0">
+<span class="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">৳299</span>
+<span class="block font-label-sm text-label-sm text-outline uppercase tracking-wider">30 Days</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 gap-2">
+<span class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">bolt</span>
+<span>4.5G Non-stop</span>
+</span>
+<button class="h-10 px-4 rounded-xl bg-surface-container text-primary font-label-md text-label-md flex items-center gap-1 active:scale-[0.98] transition-transform hover:bg-surface-container-high" onclick="triggerOfferSheet('25 GB Super Data', '299')" type="button">
+<span>View Details</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</article>
+<!-- CARD 3: Weekly Smart Combo -->
+<article class="relative bg-surface-container-lowest rounded-2xl p-4 shadow-[0_2px_8px_-2px_rgba(30,58,138,0.06)] flex flex-col gap-3 group">
+<div class="flex items-center justify-between">
+<span class="px-2 py-0.5 rounded-md bg-surface-container-highest text-primary font-label-sm text-label-sm font-bold">
+          GP Weekly
+        </span>
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold">
+          ৳30 bKash Cashback
+        </span>
+</div>
+<div class="flex items-start justify-between gap-2">
+<div class="flex-1 min-w-0">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate">10 GB + 200 Mins</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline">sms</span>
+            +100 SMS to any operator • Weekly Combo
+          </p>
+</div>
+<div class="text-right shrink-0">
+<span class="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">৳198</span>
+<span class="block font-label-sm text-label-sm text-outline uppercase tracking-wider">7 Days</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 gap-2">
+<span class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">savings</span>
+<span>Best Weekly Pick</span>
+</span>
+<button class="h-10 px-4 rounded-xl bg-surface-container text-primary font-label-md text-label-md flex items-center gap-1 active:scale-[0.98] transition-transform hover:bg-surface-container-high" onclick="triggerOfferSheet('10 GB + 200 Mins', '198')" type="button">
+<span>View Details</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</article>
+<!-- CARD 4: Dedicated Voice Pack -->
+<article class="relative bg-surface-container-lowest rounded-2xl p-4 shadow-[0_2px_8px_-2px_rgba(30,58,138,0.06)] flex flex-col gap-3 group">
+<div class="flex items-center justify-between">
+<span class="px-2 py-0.5 rounded-md bg-surface-container-highest text-primary font-label-sm text-label-sm font-bold">
+          GP Voice Only
+        </span>
+<span class="px-2 py-0.5 rounded-md bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-semibold">
+          High Clarity
+        </span>
+</div>
+<div class="flex items-start justify-between gap-2">
+<div class="flex-1 min-w-0">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate">Unlimited Voice 500 Mins</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline">call</span>
+            To any local number 24/7 • HD VoLTE
+          </p>
+</div>
+<div class="text-right shrink-0">
+<span class="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">৳307</span>
+<span class="block font-label-sm text-label-sm text-outline uppercase tracking-wider">30 Days</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 gap-2">
+<span class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">cell_tower</span>
+<span>1-sec pulse</span>
+</span>
+<button class="h-10 px-4 rounded-xl bg-surface-container text-primary font-label-md text-label-md flex items-center gap-1 active:scale-[0.98] transition-transform hover:bg-surface-container-high" onclick="triggerOfferSheet('Unlimited Voice 500 Mins', '307')" type="button">
+<span>View Details</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</article>
+</section>
+<!-- Bottom Navigation Sheet Placeholder / Quick Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-40 bg-surface-container-lowest/95 backdrop-blur-lg shadow-[0_-4px_16px_rgba(0,0,0,0.06)] pb-safe">
+<div class="h-16 px-gutter flex items-center justify-around max-w-lg mx-auto">
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[22px]">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-primary active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">sim_card</span>
+<span class="font-label-sm text-label-sm font-bold">Operators</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[22px]">local_offer</span>
+<span class="font-label-sm text-label-sm">My Offers</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[22px]">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm">Recharge</span>
+</button>
+</div>
+</nav>
+<!-- Interactive Modal Bottom Sheet for Offer Details -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-xs hidden items-end justify-center transition-opacity" id="offer-modal">
+<div class="w-full max-w-md bg-surface-container-lowest rounded-t-3xl p-5 shadow-2xl animate-in slide-in-from-bottom duration-200">
+<div class="w-12 h-1.5 bg-outline-variant/60 rounded-full mx-auto mb-4"></div>
+<div class="flex items-center justify-between pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[24px]">verified</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate" id="modal-title">Grameenphone Pack</h3>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant" onclick="closeOfferModal()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="bg-surface-container-low rounded-xl p-3 my-2 flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Recharge Amount</span>
+<p class="font-headline-md text-headline-md text-primary font-bold" id="modal-price">৳0</p>
+</div>
+<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed font-label-md text-label-md rounded-lg">Instant Delivery</span>
+</div>
+<div class="py-2 space-y-2 text-on-surface-variant font-body-sm text-body-sm">
+<p class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container text-[18px]">check</span>
+          Dial *121*1# to check remaining data and minutes balance
+        </p>
+<p class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container text-[18px]">check</span>
+          Usable in 2G/3G/4G/5G network areas all over Bangladesh
+        </p>
+<p class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container text-[18px]">check</span>
+          bKash / Nagad / Upay instant cashback applies on checkout
+        </p>
+</div>
+<div class="mt-4 pt-2">
+<button class="w-full h-12 rounded-xl bg-secondary-container text-on-secondary-container font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-md active:scale-[0.98] transition-transform" onclick="closeOfferModal()" type="button">
+<span>Proceed to Recharge</span>
+<span class="material-symbols-outlined text-[20px]">bolt</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Sort drawer toggle interaction
+  const sortBtn = document.getElementById('sort-trigger');
+  const sortDrawer = document.getElementById('sort-drawer');
+
+  if (sortBtn && sortDrawer) {
+    sortBtn.addEventListener('click', () => {
+      sortDrawer.classList.toggle('hidden');
+      sortDrawer.classList.toggle('flex');
+    });
+  }
+
+  // Offer Sheet Modal Interactions
+  function triggerOfferSheet(title, price) {
+    const modal = document.getElementById('offer-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalPrice = document.getElementById('modal-price');
+
+    if (modal && modalTitle && modalPrice) {
+      modalTitle.textContent = title;
+      modalPrice.textContent = '৳' + price;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+  }
+
+  function closeOfferModal() {
+    const modal = document.getElementById('offer-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  }
+
+  // Close modal when tapping on background scrim
+  document.getElementById('offer-modal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'offer-modal') {
+      closeOfferModal();
+    }
+  });
+</script></main></body></html>

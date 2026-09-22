@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;font-family:'Plus Jakarta Sans',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "tertiary": "#003211", "secondary-fixed": "#ffdbca", "on-secondary-fixed": "#341100", "primary-fixed": "#dce1ff", "surface-container-low": "#eff4ff", "secondary-fixed-dim": "#ffb690", "surface-tint": "#4059aa", "surface-dim": "#cbdbf5", "secondary": "#9d4300", "tertiary-fixed-dim": "#62df7d", "on-error-container": "#93000a", "error-container": "#ffdad6", "surface-container-high": "#dce9ff", "surface-container": "#e5eeff", "on-primary-container": "#90a8ff", "surface-variant": "#d3e4fe", "secondary-container": "#fd761a", "inverse-on-surface": "#eaf1ff", "on-surface-variant": "#444651", "on-tertiary-fixed-variant": "#005320", "on-secondary-container": "#5c2400", "inverse-surface": "#213145", "surface-container-lowest": "#ffffff", "on-tertiary-fixed": "#002109", "on-tertiary": "#ffffff", "outline-variant": "#c5c5d3", "error": "#ba1a1a", "on-background": "#0b1c30", "primary": "#00236f", "surface": "#f8f9ff", "surface-container-highest": "#d3e4fe", "on-primary-fixed": "#00164e", "on-tertiary-container": "#44c365", "on-error": "#ffffff", "tertiary-container": "#004b1d", "primary-container": "#1e3a8a", "outline": "#757682", "surface-bright": "#f8f9ff", "background": "#f8f9ff", "on-secondary-fixed-variant": "#783200", "inverse-primary": "#b6c4ff", "primary-fixed-dim": "#b6c4ff", "on-surface": "#0b1c30", "on-secondary": "#ffffff", "on-primary": "#ffffff", "tertiary-fixed": "#7ffc97", "on-primary-fixed-variant": "#264191" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-sm": "0.5rem", "gutter": "1rem", "space-xl": "1.25rem", "space-lg": "1rem", "space-md": "0.75rem", "margin": "1rem", "space-xs": "0.25rem" }, fontFamily: { "label-md": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "title-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"] }, fontSize: { "label-md": ["12px", { lineHeight: "16px", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "500" }], "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "700" }], "title-md": ["16px", { lineHeight: "22px", fontWeight: "600" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "headline-md": ["24px", { lineHeight: "32px", fontWeight: "700" }], "title-lg": ["18px", { lineHeight: "24px", fontWeight: "600" }], "label-sm": ["10px", { lineHeight: "14px", fontWeight: "700" }], "headline-lg": ["30px", { lineHeight: "38px", fontWeight: "800" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "label-lg": ["14px", { lineHeight: "20px", fontWeight: "700" }] } } } };</script></head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm"><button aria-label="Go back" class="w-11 h-11 -ml-2 flex items-center justify-center rounded-full text-on-surface hover:text-primary active:bg-surface-container-high transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Brand logo. - Primary color: #1e3a8a
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UeMsV6ci9oU1lpcri6ZIJQMfjmO_nLLkFgHw8Th9AsRZuTrhBxDmVKfdBoCFlZgoIvRpvZfekQj6Esfh6Z182X3XzMP_E2jTmMThKUkx8BatV9iUdDxSsZe-fi-nBtFGriEj_eziO8PjjioT_Vu44rtmWaV4cfwVl5Jmy7TG1h0ijF318egq7F2MXy9Si2h-DIIZWo_EgYK7oORlYs2WdppQmdfsZ7a6AX2mWLHt6_QkVKQlIsYrg1JEs"/><h1 class="font-title-lg text-title-lg text-on-surface truncate">Saved Numbers</h1></div><div class="flex items-center gap-space-sm"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed" src="https://lh3.googleusercontent.com/aida/AEtjO1VllrNJgh5yjqj91i5u5znYQqTEiI9nmmxd109GQ5nTRzkSx-z0FH6b2jCHF4o-aTFGycrVcWjNLErPx7wjEyjo-UM99OWLRh7VseWeOCytQckjvp6bFic1v6VJ9YABHpW8cIY6mXl6K8AYzlZM5sFfOVFAFmNlFf96ZhV79gSfMZ65Qu8SJggRNuEBZFuHoVLg3ZImu8tMDq7Nd5l-5jU7j0D-5Tw0IwEM5RAO5KrYIRE5jaRoatGZNPs"/></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-safe bg-surface"><div class="flex flex-col w-full pb-24">
+<!-- Top Action & Search Header Area -->
+<div class="px-margin pt-space-md flex flex-col gap-space-md">
+<!-- Top Bar Secondary Header Action Row -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">Directory</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm">4 Saved</span>
+</div>
+<button class="h-10 px-4 rounded-full bg-secondary-container text-on-secondary shadow-md flex items-center justify-center gap-1 active:scale-95 transition-transform" id="open-add-modal-btn" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span class="font-label-lg text-label-lg">Add New</span>
+</button>
+</div>
+<!-- Helpful Intro Banner -->
+<div class="relative overflow-hidden rounded-2xl bg-surface-container-low p-4 shadow-sm">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary-container shrink-0">
+<span class="material-symbols-outlined text-[24px]">contact_phone</span>
+</div>
+<div class="flex-1 min-w-0 pr-1">
+<p class="font-title-md text-title-md text-on-surface">Quick Express Recharge</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
+            Save numbers of your family &amp; friends to recharge or send drive offers with one tap without retyping.
+          </p>
+</div>
+</div>
+<div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-primary-fixed-dim/20 pointer-events-none"></div>
+</div>
+<!-- Search & Filter Bar -->
+<div class="relative w-full">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[22px]">search</span>
+</div>
+<input class="w-full h-12 pl-11 pr-10 rounded-2xl bg-surface-container-lowest shadow-sm text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none focus:bg-surface-container-low transition-colors" id="contact-search-input" placeholder="Search by name or number..." type="text"/>
+<button aria-label="Clear search" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-outline hover:text-on-surface" id="clear-search-btn" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Carrier Filter Pills -->
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+<button class="filter-chip px-3.5 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md shrink-0 shadow-sm transition-all" data-operator="all" type="button">
+        All (4)
+      </button>
+<button class="filter-chip px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shrink-0 shadow-sm transition-all" data-operator="grameenphone" type="button">
+        Grameenphone
+      </button>
+<button class="filter-chip px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shrink-0 shadow-sm transition-all" data-operator="banglalink" type="button">
+        Banglalink
+      </button>
+<button class="filter-chip px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shrink-0 shadow-sm transition-all" data-operator="robi" type="button">
+        Robi
+      </button>
+<button class="filter-chip px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shrink-0 shadow-sm transition-all" data-operator="teletalk" type="button">
+        Teletalk
+      </button>
+</div>
+</div>
+<!-- Contacts List Stack -->
+<div class="px-margin mt-space-md flex flex-col gap-space-md" id="contacts-container">
+<!-- Card 1: Mom (GP) -->
+<div class="contact-card relative rounded-2xl bg-surface-container-lowest p-4 shadow-sm transition-all hover:shadow-md" data-name="mom আম্মু" data-number="01712456" data-operator="grameenphone">
+<div class="flex items-center justify-between gap-3">
+<!-- Left: Avatar + Info -->
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-12 h-12 rounded-full bg-error-container text-on-error-container font-headline-sm text-headline-sm flex items-center justify-center shrink-0 shadow-sm">
+            M
+          </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-title-md text-on-surface truncate">Mom (আম্মু)</span>
+<span class="material-symbols-outlined text-secondary text-[16px]" title="Favorite contact">favorite</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant tracking-wide mt-0.5">
+              +880 1712-•••456
+            </p>
+<div class="flex items-center gap-1 mt-1">
+<span class="w-2 h-2 rounded-full bg-[#00A859]"></span>
+<span class="font-label-sm text-label-sm text-outline">Grameenphone</span>
+</div>
+</div>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-1.5 shrink-0">
+<button class="buy-pack-btn h-9 px-3.5 rounded-xl bg-secondary-container text-on-secondary font-label-lg text-label-lg shadow-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" data-op="GP" data-recipient="Mom (আম্মু)" type="button">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+<span>Buy Pack</span>
+</button>
+<div class="relative">
+<button aria-label="More options for Mom" class="kebab-btn w-9 h-9 rounded-full flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<!-- Dropdown Popover -->
+<div class="kebab-menu hidden absolute right-0 top-10 w-36 py-1.5 rounded-xl bg-surface-container-lowest shadow-xl z-20 flex flex-col">
+<button class="edit-btn w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" data-id="1" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">edit</span>
+<span>Edit Info</span>
+</button>
+<button class="history-btn w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-outline">history</span>
+<span>Past Drives</span>
+</button>
+<div class="my-1 h-px bg-surface-container"></div>
+<button class="delete-btn w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-error-container text-error font-label-md text-label-md transition-colors" data-name="Mom (আম্মু)" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+<span>Delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Office SIM (Banglalink) -->
+<div class="contact-card relative rounded-2xl bg-surface-container-lowest p-4 shadow-sm transition-all hover:shadow-md" data-name="office sim অফিস" data-number="01911892" data-operator="banglalink">
+<div class="flex items-center justify-between gap-3">
+<!-- Left: Avatar + Info -->
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary font-headline-sm text-headline-sm flex items-center justify-center shrink-0 shadow-sm">
+            OS
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">Office SIM (অফিস)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant tracking-wide mt-0.5">
+              +880 1911-•••892
+            </p>
+<div class="flex items-center gap-1 mt-1">
+<span class="w-2 h-2 rounded-full bg-[#FF6A00]"></span>
+<span class="font-label-sm text-label-sm text-outline">Banglalink</span>
+</div>
+</div>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-1.5 shrink-0">
+<button class="buy-pack-btn h-9 px-3.5 rounded-xl bg-secondary-container text-on-secondary font-label-lg text-label-lg shadow-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" data-op="Banglalink" data-recipient="Office SIM (অফিস)" type="button">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+<span>Buy Pack</span>
+</button>
+<div class="relative">
+<button aria-label="More options for Office SIM" class="kebab-btn w-9 h-9 rounded-full flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<div class="kebab-menu hidden absolute right-0 top-10 w-36 py-1.5 rounded-xl bg-surface-container-lowest shadow-xl z-20 flex flex-col">
+<button class="edit-btn w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" data-id="2" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">edit</span>
+<span>Edit Info</span>
+</button>
+<button class="history-btn w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-outline">history</span>
+<span>Past Drives</span>
+</button>
+<div class="my-1 h-px bg-surface-container"></div>
+<button class="delete-btn w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-error-container text-error font-label-md text-label-md transition-colors" data-name="Office SIM (অফিস)" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+<span>Delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3: Brother (Robi) -->
+<div class="contact-card relative rounded-2xl bg-surface-container-lowest p-4 shadow-sm transition-all hover:shadow-md" data-name="brother তানজিম" data-number="01823331" data-operator="robi">
+<div class="flex items-center justify-between gap-3">
+<!-- Left: Avatar + Info -->
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed text-on-secondary-fixed font-headline-sm text-headline-sm flex items-center justify-center shrink-0 shadow-sm">
+            B
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">Brother (তানজিম)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant tracking-wide mt-0.5">
+              +880 1823-•••331
+            </p>
+<div class="flex items-center gap-1 mt-1">
+<span class="w-2 h-2 rounded-full bg-[#E30613]"></span>
+<span class="font-label-sm text-label-sm text-outline">Robi</span>
+</div>
+</div>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-1.5 shrink-0">
+<button class="buy-pack-btn h-9 px-3.5 rounded-xl bg-secondary-container text-on-secondary font-label-lg text-label-lg shadow-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" data-op="Robi" data-recipient="Brother (তানজিম)" type="button">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+<span>Buy Pack</span>
+</button>
+<div class="relative">
+<button aria-label="More options for Brother" class="kebab-btn w-9 h-9 rounded-full flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<div class="kebab-menu hidden absolute right-0 top-10 w-36 py-1.5 rounded-xl bg-surface-container-lowest shadow-xl z-20 flex flex-col">
+<button class="edit-btn w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" data-id="3" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">edit</span>
+<span>Edit Info</span>
+</button>
+<button class="history-btn w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-outline">history</span>
+<span>Past Drives</span>
+</button>
+<div class="my-1 h-px bg-surface-container"></div>
+<button class="delete-btn w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-error-container text-error font-label-md text-label-md transition-colors" data-name="Brother (তানজিম)" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+<span>Delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 4: Father (Teletalk) -->
+<div class="contact-card relative rounded-2xl bg-surface-container-lowest p-4 shadow-sm transition-all hover:shadow-md" data-name="father আব্বু" data-number="01552104" data-operator="teletalk">
+<div class="flex items-center justify-between gap-3">
+<!-- Left: Avatar + Info -->
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-headline-sm text-headline-sm flex items-center justify-center shrink-0 shadow-sm">
+            F
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface truncate">Father (আব্বু)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant tracking-wide mt-0.5">
+              +880 1552-•••104
+            </p>
+<div class="flex items-center gap-1 mt-1">
+<span class="w-2 h-2 rounded-full bg-[#3FB449]"></span>
+<span class="font-label-sm text-label-sm text-outline">Teletalk</span>
+</div>
+</div>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-1.5 shrink-0">
+<button class="buy-pack-btn h-9 px-3.5 rounded-xl bg-secondary-container text-on-secondary font-label-lg text-label-lg shadow-sm flex items-center justify-center gap-1 active:scale-95 transition-transform" data-op="Teletalk" data-recipient="Father (আব্বু)" type="button">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+<span>Buy Pack</span>
+</button>
+<div class="relative">
+<button aria-label="More options for Father" class="kebab-btn w-9 h-9 rounded-full flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<div class="kebab-menu hidden absolute right-0 top-10 w-36 py-1.5 rounded-xl bg-surface-container-lowest shadow-xl z-20 flex flex-col">
+<button class="edit-btn w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" data-id="4" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">edit</span>
+<span>Edit Info</span>
+</button>
+<button class="history-btn w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-outline">history</span>
+<span>Past Drives</span>
+</button>
+<div class="my-1 h-px bg-surface-container"></div>
+<button class="delete-btn w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-error-container text-error font-label-md text-label-md transition-colors" data-name="Father (আব্বু)" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+<span>Delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty Search Feedback State (Hidden by default) -->
+<div class="hidden px-margin py-10 flex flex-col items-center text-center" id="empty-state">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-outline mb-3">
+<span class="material-symbols-outlined text-[32px]">person_search</span>
+</div>
+<p class="font-title-md text-title-md text-on-surface">No contacts found</p>
+<p class="font-body-sm text-body-sm text-outline mt-1 max-w-xs">
+      Try adjusting your search terms or carrier filter above.
+    </p>
+</div>
+<!-- Sticky Bottom Quick Action Button -->
+<div class="fixed bottom-4 inset-x-0 px-margin pointer-events-none z-30">
+<button class="pointer-events-auto w-full h-13 py-3.5 px-4 rounded-2xl bg-primary-container text-on-primary font-headline-sm text-headline-sm shadow-xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform" id="bottom-add-btn" type="button">
+<span class="material-symbols-outlined text-[24px]">person_add</span>
+<span class="font-label-lg text-label-lg tracking-wide">+ Add New Contact Number</span>
+</button>
+</div>
+<!-- Add / Edit Contact Modal Sheet -->
+<div class="hidden fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" id="contact-modal">
+<div class="w-full sm:max-w-md bg-surface-container-lowest rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl flex flex-col gap-4 animate-in slide-in-from-bottom duration-200">
+<div class="flex items-center justify-between pb-1">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">contacts</span>
+</div>
+<h2 class="font-title-lg text-title-lg text-on-surface" id="modal-title">Add Saved Contact</h2>
+</div>
+<button class="w-9 h-9 rounded-full flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container" id="close-modal-btn" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<form class="flex flex-col gap-3.5" id="contact-form" onsubmit="event.preventDefault();">
+<!-- Name Label Field -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant">Label / Name (e.g. Sister, হোম)</label>
+<input class="h-12 px-4 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-container-high transition-colors" id="form-name" placeholder="e.g. Choto Bon (ছোট বোন)" required="" type="text"/>
+</div>
+<!-- Phone Number Field -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant">Mobile Number</label>
+<div class="flex items-center rounded-xl bg-surface-container-low px-4 h-12">
+<span class="font-label-lg text-label-lg text-on-surface-variant mr-2">+880</span>
+<input class="flex-1 bg-transparent text-on-surface font-body-md text-body-md focus:outline-none" id="form-phone" maxlength="10" placeholder="1XXXXXXXXX" required="" type="tel"/>
+</div>
+</div>
+<!-- Operator Picker -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant">Mobile Operator</label>
+<div class="grid grid-cols-2 gap-2">
+<label class="flex items-center gap-2 p-2.5 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors">
+<input checked="" class="text-primary focus:ring-0" name="operator-choice" type="radio" value="Grameenphone"/>
+<span class="w-2 h-2 rounded-full bg-[#00A859]"></span>
+<span class="font-label-md text-label-md text-on-surface">Grameenphone</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors">
+<input class="text-primary focus:ring-0" name="operator-choice" type="radio" value="Banglalink"/>
+<span class="w-2 h-2 rounded-full bg-[#FF6A00]"></span>
+<span class="font-label-md text-label-md text-on-surface">Banglalink</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors">
+<input class="text-primary focus:ring-0" name="operator-choice" type="radio" value="Robi"/>
+<span class="w-2 h-2 rounded-full bg-[#E30613]"></span>
+<span class="font-label-md text-label-md text-on-surface">Robi</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors">
+<input class="text-primary focus:ring-0" name="operator-choice" type="radio" value="Teletalk"/>
+<span class="w-2 h-2 rounded-full bg-[#3FB449]"></span>
+<span class="font-label-md text-label-md text-on-surface">Teletalk</span>
+</label>
+</div>
+</div>
+<!-- Form CTAs -->
+<div class="flex items-center gap-3 pt-2">
+<button class="flex-1 h-12 rounded-xl bg-surface-container text-on-surface font-label-lg text-label-lg active:scale-98 transition-all" id="cancel-modal-btn" type="button">
+            Cancel
+          </button>
+<button class="flex-1 h-12 rounded-xl bg-primary-container text-on-primary font-label-lg text-label-lg shadow-md active:scale-98 transition-all" id="save-modal-btn" type="submit">
+            Save Contact
+          </button>
+</div>
+</form>
+</div>
+</div>
+<!-- Toast Notification System -->
+<div class="fixed top-20 inset-x-0 mx-auto w-fit max-w-[90%] px-4 py-2.5 rounded-full bg-inverse-surface text-inverse-on-surface shadow-xl flex items-center gap-2 font-label-md text-label-md transform -translate-y-12 opacity-0 pointer-events-none transition-all duration-300 z-50" id="toast-bar">
+<span class="material-symbols-outlined text-[18px] text-tertiary-fixed">check_circle</span>
+<span id="toast-message">Contact saved successfully!</span>
+</div>
+</div>
+<script>
+  (function() {
+    // Dropdown Kebab Menus Toggle
+    const kebabButtons = document.querySelectorAll('.kebab-btn');
+    
+    kebabButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const currentMenu = btn.nextElementSibling;
+        const allMenus = document.querySelectorAll('.kebab-menu');
+        
+        allMenus.forEach(m => {
+          if (m !== currentMenu) m.classList.add('hidden');
+        });
+        
+        currentMenu.classList.toggle('hidden');
+      });
+    });
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.kebab-menu').forEach(m => m.classList.add('hidden'));
+    });
+
+    // Toast Function
+    const toast = document.getElementById('toast-bar');
+    const toastMsg = document.getElementById('toast-message');
+    function showToast(text, icon = 'check_circle') {
+      toastMsg.innerText = text;
+      const iconElem = toast.querySelector('.material-symbols-outlined');
+      if (iconElem) iconElem.innerText = icon;
+      toast.classList.remove('-translate-y-12', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.add('-translate-y-12', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 2600);
+    }
+
+    // Modal Handling
+    const modal = document.getElementById('contact-modal');
+    const openAddBtn = document.getElementById('open-add-modal-btn');
+    const bottomAddBtn = document.getElementById('bottom-add-btn');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const cancelModalBtn = document.getElementById('cancel-modal-btn');
+    const modalTitle = document.getElementById('modal-title');
+    const formName = document.getElementById('form-name');
+    const formPhone = document.getElementById('form-phone');
+
+    function openModal(isEdit = false, defaultName = '', defaultPhone = '') {
+      modalTitle.innerText = isEdit ? 'Edit Contact Info' : 'Add Saved Contact';
+      formName.value = defaultName;
+      formPhone.value = defaultPhone;
+      modal.classList.remove('hidden');
+      formName.focus();
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      formName.value = '';
+      formPhone.value = '';
+    }
+
+    openAddBtn.addEventListener('click', () => openModal(false));
+    bottomAddBtn.addEventListener('click', () => openModal(false));
+    closeModalBtn.addEventListener('click', closeModal);
+    cancelModalBtn.addEventListener('click', closeModal);
+
+    // Save contact action
+    document.getElementById('contact-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      closeModal();
+      showToast('Number saved into your Quick Directory!');
+    });
+
+    // Delete contact simulation
+    document.querySelectorAll('.delete-btn').forEach(del => {
+      del.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const contactName = del.getAttribute('data-name');
+        const card = del.closest('.contact-card');
+        card.style.opacity = '0.3';
+        card.style.transform = 'scale(0.96)';
+        setTimeout(() => {
+          card.remove();
+          showToast(`Deleted ${contactName}`, 'delete');
+        }, 200);
+      });
+    });
+
+    // Edit contact simulation
+    document.querySelectorAll('.edit-btn').forEach(edit => {
+      edit.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = edit.closest('.contact-card');
+        const name = card.querySelector('.truncate').innerText;
+        openModal(true, name, '1712456');
+      });
+    });
+
+    // Buy Pack Action trigger
+    document.querySelectorAll('.buy-pack-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const name = btn.getAttribute('data-recipient');
+        const op = btn.getAttribute('data-op');
+        showToast(`Loading top packs for ${name} (${op})...`, 'bolt');
+      });
+    });
+
+    // Filter Chips & Search Filter Logic
+    const searchInput = document.getElementById('contact-search-input');
+    const clearBtn = document.getElementById('clear-search-btn');
+    const filterChips = document.querySelectorAll('.filter-chip');
+    const cards = document.querySelectorAll('.contact-card');
+    const emptyState = document.getElementById('empty-state');
+    let activeFilter = 'all';
+
+    function runFilters() {
+      const query = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardName = (card.getAttribute('data-name') || '').toLowerCase();
+        const cardNumber = (card.getAttribute('data-number') || '').toLowerCase();
+        const cardOp = (card.getAttribute('data-operator') || '').toLowerCase();
+
+        const matchesQuery = !query || cardName.includes(query) || cardNumber.includes(query);
+        const matchesOp = (activeFilter === 'all') || (cardOp === activeFilter);
+
+        if (matchesQuery && matchesOp) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (visibleCount === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+      }
+    }
+
+    searchInput.addEventListener('input', () => {
+      if (searchInput.value.length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+      runFilters();
+    });
+
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      clearBtn.classList.add('hidden');
+      runFilters();
+      searchInput.focus();
+    });
+
+    filterChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        filterChips.forEach(c => {
+          c.classList.remove('bg-primary', 'text-on-primary');
+          c.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+        });
+        chip.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+        chip.classList.add('bg-primary', 'text-on-primary');
+        
+        activeFilter = chip.getAttribute('data-operator');
+        runFilters();
+      });
+    });
+
+  })();
+</script></main></body></html>

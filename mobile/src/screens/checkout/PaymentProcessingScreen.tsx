@@ -1,0 +1,79 @@
+import React, { useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  SafeAreaView,
+} from 'react-native';
+import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
+import { spacing } from '../../theme/spacing';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../navigation/types';
+import { useOrder } from '../../context/OrderContext';
+
+type ProcRouteProp = RouteProp<RootStackParamList, 'PaymentProcessing'>;
+type ProcNavProp = StackNavigationProp<RootStackParamList, 'PaymentProcessing'>;
+
+interface Props {
+  route: ProcRouteProp;
+  navigation: ProcNavProp;
+}
+
+export const PaymentProcessingScreen: React.FC<Props> = ({ route, navigation }) => {
+  const { orderId } = route.params;
+  const { recipientNumber } = useOrder();
+
+  useEffect(() => {
+    // Simulate backend connection and trigger server error as requested
+    const timer = setTimeout(() => {
+      navigation.replace('PaymentFailed', {
+        reason: 'সার্ভারে একটি সমস্যা হচ্ছে, অনুগ্রহ করে আবার চেষ্টা করুন। (Server Error: 500)',
+      });
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <ActivityIndicator size="large" color={colors.primaryContainer} style={styles.spinner} />
+        <Text style={[typography.headlineSm, styles.title]}>Processing Recharge...</Text>
+        <Text style={[typography.bodyMd, styles.subtitle]}>
+          Connecting with telecom operator gateway for {recipientNumber || 'your number'}. Please do not close or exit the app.
+        </Text>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f8f9ff',
+  },
+  content: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.xxl,
+  },
+  spinner: {
+    marginBottom: spacing.xl,
+    transform: [{ scale: 1.5 }],
+  },
+  title: {
+    color: colors.primaryContainer,
+    marginBottom: spacing.sm,
+    textAlign: 'center',
+    fontWeight: '700',
+  },
+  subtitle: {
+    color: colors.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+});

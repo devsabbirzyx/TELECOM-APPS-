@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        overscroll-behavior: none;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .animate-caret {
+      animation: blink 1s step-end infinite;
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-bright": "#f8f9ff",
+            "on-secondary-container": "#5c2400",
+            "secondary-fixed": "#ffdbca",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eff4ff",
+            "on-primary-container": "#90a8ff",
+            "on-secondary": "#ffffff",
+            "on-error": "#ffffff",
+            "tertiary": "#003211",
+            "background": "#f8f9ff",
+            "error": "#ba1a1a",
+            "on-primary-fixed-variant": "#264191",
+            "on-secondary-fixed": "#341100",
+            "on-surface-variant": "#444651",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed-variant": "#005320",
+            "on-primary": "#ffffff",
+            "inverse-on-surface": "#eaf1ff",
+            "on-surface": "#0b1c30",
+            "tertiary-container": "#004b1d",
+            "on-primary-fixed": "#00164e",
+            "surface-tint": "#4059aa",
+            "surface": "#f8f9ff",
+            "secondary": "#9d4300",
+            "surface-container-high": "#dce9ff",
+            "on-error-container": "#93000a",
+            "on-secondary-fixed-variant": "#783200",
+            "secondary-fixed-dim": "#ffb690",
+            "on-tertiary-fixed": "#002109",
+            "primary": "#00236f",
+            "tertiary-fixed-dim": "#62df7d",
+            "surface-variant": "#d3e4fe",
+            "on-background": "#0b1c30",
+            "outline-variant": "#c5c5d3",
+            "primary-container": "#1e3a8a",
+            "tertiary-fixed": "#7ffc97",
+            "surface-container": "#e5eeff",
+            "primary-fixed-dim": "#b6c4ff",
+            "surface-container-highest": "#d3e4fe",
+            "on-tertiary": "#ffffff",
+            "primary-fixed": "#dce1ff",
+            "inverse-primary": "#b6c4ff",
+            "inverse-surface": "#213145",
+            "secondary-container": "#fd761a",
+            "outline": "#757682",
+            "on-tertiary-container": "#44c365",
+            "surface-dim": "#cbdbf5",
+            "bkash": "#E2136E",
+            "bkash-dark": "#c10e5d"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-lg": "1rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "space-xl": "1.25rem",
+            "margin": "1rem"
+          },
+          fontFamily: {
+            "body-sm": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-[#7f889b] text-on-surface font-body-md text-body-md pt-safe pb-safe flex flex-col min-h-screen relative overflow-hidden select-none">
+<!-- Blurred Base OfferHut screen underneath modal -->
+<div class="absolute inset-0 filter blur-[6px] opacity-40 pointer-events-none p-4 flex flex-col">
+<div class="w-full flex items-center justify-between py-3 mb-4">
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[18px]">bolt</span>
+</div>
+<span class="font-bold text-on-surface">OfferHut</span>
+</div>
+<div class="px-3 py-1 bg-white rounded-full text-xs font-bold">256-BIT SSL</div>
+</div>
+<div class="w-full max-w-xs mx-auto bg-white rounded-3xl p-6 h-96 mt-6 shadow-md"></div>
+</div>
+<!-- Modal Backdrop / Screen Container -->
+<main class="relative z-10 flex-1 flex flex-col justify-between max-w-md mx-auto w-full h-full bg-[#8b95a5]/40 backdrop-blur-md">
+<!-- Top Modal Content -->
+<div class="w-full px-3.5 pt-3 pb-2 flex-1 flex flex-col justify-center">
+<div class="w-full bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col border border-white/60">
+<!-- bKash Modal Header -->
+<div class="bg-white px-5 pt-4 pb-3 flex flex-col items-center border-b border-gray-100">
+<img alt="bKash" class="h-10 w-auto object-contain mb-1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjTC1ANwJaunDptS6oqqigcbSmvm9l5Cotxp0-hYfe_Rfht9mC9AZgMwdyQNMSfzO-UWPcCiRpt9j9cLNgY__z53ugX2AapggfU53X7dvxKFV-_NhcDZoaTbThN5PGD8rtXGLdGPAjKEgmiT9UBKsMLQe_sIJK5g96z_FbN0A6YlYSoiP8f0pq5zKahfQL7o-y54GF0xR907yE3z4a61KrSfa08foR3Hlo56Zz_xuxaXwIUy8sFNKPPBTUGuaVHH1UrA"/>
+<div class="w-full flex items-center justify-between mt-2 pt-1 border-t border-gray-100/80 text-left">
+<div class="flex items-center space-x-2.5">
+<div class="w-7 h-7 rounded-full bg-[#f15a24] flex items-center justify-center text-white text-[10px] font-bold shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[15px]">cell_tower</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[13px] font-bold text-gray-800 leading-tight">OfferHut Recharge</span>
+<span class="text-[11px] text-gray-500 font-medium">Banglalink (019 ** *** 981)</span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[11px] text-gray-400 block font-medium">Amount</span>
+<span class="text-[15px] font-extrabold text-[#E2136E]">৳498</span>
+</div>
+</div>
+</div>
+<!-- Session Timer Bar -->
+<div class="w-full bg-gray-50 border-b border-gray-100 px-4 py-1.5 flex items-center justify-center text-center">
+<div class="flex items-center space-x-1.5 text-gray-700">
+<span class="material-symbols-outlined text-[15px] text-[#E2136E]">timer</span>
+<span class="text-xs font-bold tracking-wider font-mono text-gray-700" id="bkash-timer">09:07</span>
+</div>
+</div>
+<!-- Signature bKash Pink Body -->
+<div class="bg-bkash px-5 py-6 flex flex-col items-center text-white relative">
+<!-- Instruction Text -->
+<p class="text-[13px] font-medium text-center text-pink-50 mb-3 px-2 leading-snug">
+            Enter verification code sent to <span class="font-bold text-white tracking-wide">019 ** *** 981</span>
+</p>
+<!-- Input Box (OTP) -->
+<div class="w-full max-w-xs relative my-1">
+<div class="w-full bg-white rounded-lg h-12 shadow-inner flex items-center justify-center px-4 border border-pink-200">
+<div class="flex items-center justify-center space-x-1" id="otp-display">
+<span class="text-gray-400 text-sm font-medium" id="otp-placeholder">Enter 6 digit code</span>
+<span class="w-[1.5px] h-5 bg-gray-700 inline-block animate-caret ml-0.5" id="cursor"></span>
+</div>
+</div>
+</div>
+<!-- Resend Countdown -->
+<div class="mt-2.5 mb-5 flex items-center space-x-1">
+<span class="text-[12px] text-pink-100 font-semibold" id="resend-label">Resend Code in <span class="font-bold text-white underline" id="resend-countdown">21s</span></span>
+</div>
+<!-- Terms Note -->
+<p class="text-[10px] text-pink-100/90 text-center leading-normal max-w-xs px-2 mb-2 font-normal">
+            You authorize bKash to process your future transactions with this merchant without PIN
+          </p>
+<!-- Action Buttons -->
+<div class="w-full flex items-center justify-between gap-3 mt-3 pt-2">
+<button class="flex-1 py-2.5 px-4 bg-white/20 hover:bg-white/30 active:bg-white/40 text-white rounded-lg font-bold text-xs transition border border-white/30 text-center" type="button">
+              CLOSE
+            </button>
+<button class="flex-1 py-2.5 px-4 bg-white hover:bg-pink-50 active:bg-gray-100 text-bkash rounded-lg font-extrabold text-xs shadow-md transition text-center tracking-wide" type="button">
+              CONFIRM
+            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Mobile Virtual Numeric Keypad -->
+<div class="w-full bg-[#1e242b] pt-2 pb-5 px-3 rounded-t-2xl shadow-2xl border-t border-gray-700/50">
+<!-- Keyboard Auxiliary bar -->
+<div class="w-full flex items-center justify-between px-2 pb-2 text-gray-400 border-b border-gray-700/40 mb-2">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-[18px]">dialpad</span>
+<span class="text-[11px] font-semibold tracking-wider uppercase text-gray-300">bKash Secure Input</span>
+</div>
+<div class="flex items-center space-x-2 text-xs">
+<span class="material-symbols-outlined text-[17px] text-green-400">lock</span>
+<span class="text-[11px] text-green-400 font-bold">Encrypted</span>
+</div>
+</div>
+<!-- Keypad Grid -->
+<div class="grid grid-cols-3 gap-2 px-1">
+<button class="h-12 bg-[#2d3540] hover:bg-[#384250] active:bg-[#465363] text-white text-xl font-bold rounded-lg shadow flex items-center justify-center transition" onclick="appendDigit('1')" type="button">
+          1
+        </button>
+<button class="h-12 bg-[#2d3540] hover:bg-[#384250] active:bg-[#465363] text-white text-xl font-bold rounded-lg shadow flex items-center justify-center transition" onclick="appendDigit('2')" type="button">
+          2
+        </button>
+<button class="h-12 bg-[#2d3540] hover:bg-[#384250] active:bg-[#465363] text-white text-xl font-bold rounded-lg shadow flex items-center justify-center transition" onclick="appendDigit('3')" type="button">
+          3
+        </button>
+<button class="h-12 bg-[#2d3540] hover:bg-[#384250] active:bg-[#465363] text-white text-xl font-bold rounded-lg shadow flex items-center justify-center transition" onclick="appendDigit('4')" type="button">
+          4
+        </button>
+<button class="h-12 bg-[#2d3540] hover:bg-[#384250] active:bg-[#465363] text-white text-xl font-bold rounded-lg shadow flex items-center justify-center transition" onclick="appendDigit('5')" type="button">
+          5
+        </button>
+<button class="h-12 bg-[#2d3540] hover:bg-[#384250] active:bg-[#465363] text-white text-xl font-bold rounded-lg shadow flex items-center justify-center transition" onclick="appendDigit('6')" type="button">
+          6
+        </button>
+<button class="h-12 bg-[#2d3540] hover:bg-[#384250] active:bg-[#465363] text-white text-xl font-bold rounded-lg shadow flex items-center justify-center transition" onclick="appendDigit('7')" type="button">
+          7
+        </button>
+<button class="h-12 bg-[#2d3540] hover:bg-[#384250] active:bg-[#465363] text-white text-xl font-bold rounded-lg shadow flex items-center justify-center transition" onclick="appendDigit('8')" type="button">
+          8
+        </button>
+<button class="h-12 bg-[#2d3540] hover:bg-[#384250] active:bg-[#465363] text-white text-xl font-bold rounded-lg shadow flex items-center justify-center transition" onclick="appendDigit('9')" type="button">
+          9
+        </button>
+<button class="h-12 bg-[#222933] hover:bg-[#2d3540] active:bg-[#384250] text-gray-300 text-lg font-bold rounded-lg shadow flex items-center justify-center transition" onclick="deleteDigit()" type="button">
+<span class="material-symbols-outlined text-[22px]">backspace</span>
+</button>
+<button class="h-12 bg-[#2d3540] hover:bg-[#384250] active:bg-[#465363] text-white text-xl font-bold rounded-lg shadow flex items-center justify-center transition" onclick="appendDigit('0')" type="button">
+          0
+        </button>
+<button class="h-12 bg-bkash hover:bg-bkash-dark active:opacity-90 text-white text-sm font-extrabold rounded-lg shadow flex items-center justify-center transition" type="button">
+          GO
+        </button>
+</div>
+<!-- Home Indicator bar placeholder -->
+<div class="w-32 h-1 bg-gray-600/70 rounded-full mx-auto mt-4 mb-0.5"></div>
+</div>
+</main>
+<script>
+    let otpValue = "";
+    const maxDigits = 6;
+    const otpDisplay = document.getElementById("otp-display");
+    const placeholder = document.getElementById("otp-placeholder");
+    const cursor = document.getElementById("cursor");
+
+    function updateOtpDisplay() {
+      if (otpValue.length === 0) {
+        placeholder.style.display = "inline";
+        cursor.className = "w-[1.5px] h-5 bg-gray-700 inline-block animate-caret ml-0.5";
+        otpDisplay.innerHTML = "";
+        otpDisplay.appendChild(placeholder);
+        otpDisplay.appendChild(cursor);
+      } else {
+        placeholder.style.display = "none";
+        let formatted = "";
+        for (let i = 0; i < otpValue.length; i++) {
+          formatted += `<span class="text-xl font-extrabold tracking-widest text-gray-900 mx-1">${otpValue[i]}</span>`;
+        }
+        otpDisplay.innerHTML = formatted;
+        if (otpValue.length < maxDigits) {
+          const activeCursor = document.createElement("span");
+          activeCursor.className = "w-[2px] h-5 bg-bkash inline-block animate-caret ml-1";
+          otpDisplay.appendChild(activeCursor);
+        }
+      }
+    }
+
+    function appendDigit(digit) {
+      if (otpValue.length < maxDigits) {
+        otpValue += digit;
+        updateOtpDisplay();
+      }
+    }
+
+    function deleteDigit() {
+      if (otpValue.length > 0) {
+        otpValue = otpValue.slice(0, -1);
+        updateOtpDisplay();
+      }
+    }
+
+    // Timer countdowns
+    (function initTimers() {
+      let resendSec = 21;
+      const resendElem = document.getElementById("resend-countdown");
+      const resendLabel = document.getElementById("resend-label");
+      
+      const resendInterval = setInterval(() => {
+        resendSec--;
+        if (resendSec <= 0) {
+          clearInterval(resendInterval);
+          resendLabel.innerHTML = '<a href="#" class="font-bold text-white underline cursor-pointer">Resend Code Now</a>';
+        } else {
+          if (resendElem) resendElem.textContent = resendSec + "s";
+        }
+      }, 1000);
+
+      let totalSec = 9 * 60 + 7;
+      const timerElem = document.getElementById("bkash-timer");
+      setInterval(() => {
+        if (totalSec > 0) {
+          totalSec--;
+          const m = Math.floor(totalSec / 60);
+          const s = totalSec % 60;
+          if (timerElem) {
+            timerElem.textContent = `${m < 10 ? "0" + m : m}:${s < 10 ? "0" + s : s}`;
+          }
+        }
+      }, 1000);
+    })();
+  </script>
+</body></html>

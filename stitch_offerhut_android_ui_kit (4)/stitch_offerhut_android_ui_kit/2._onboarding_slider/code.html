@@ -1,0 +1,355 @@
+<!DOCTYPE html><html class="light" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#f8f9ff;}body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary-fixed-variant": "#005320", "tertiary": "#003211", "on-surface-variant": "#444651", "on-primary-fixed-variant": "#264191", "outline-variant": "#c5c5d3", "tertiary-container": "#004b1d", "background": "#f8f9ff", "on-primary-container": "#90a8ff", "primary-fixed-dim": "#b6c4ff", "error-container": "#ffdad6", "tertiary-fixed": "#7ffc97", "surface-dim": "#cbdbf5", "surface-container": "#e5eeff", "surface-bright": "#f8f9ff", "primary": "#00236f", "on-primary": "#ffffff", "on-surface": "#0b1c30", "on-secondary-container": "#5c2400", "on-secondary": "#ffffff", "error": "#ba1a1a", "secondary-fixed": "#ffdbca", "inverse-primary": "#b6c4ff", "on-tertiary-fixed": "#002109", "on-tertiary-container": "#44c365", "inverse-surface": "#213145", "surface-tint": "#4059aa", "surface-container-high": "#dce9ff", "primary-container": "#1e3a8a", "outline": "#757682", "primary-fixed": "#dce1ff", "on-background": "#0b1c30", "secondary": "#9d4300", "on-error-container": "#93000a", "surface": "#f8f9ff", "surface-container-highest": "#d3e4fe", "tertiary-fixed-dim": "#62df7d", "on-tertiary": "#ffffff", "surface-variant": "#d3e4fe", "on-secondary-fixed-variant": "#783200", "secondary-container": "#fd761a", "secondary-fixed-dim": "#ffb690", "on-secondary-fixed": "#341100", "on-error": "#ffffff", "inverse-on-surface": "#eaf1ff", "surface-container-lowest": "#ffffff", "on-primary-fixed": "#00164e", "surface-container-low": "#eff4ff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-xs": "0.25rem", "space-md": "0.75rem", "space-sm": "0.5rem", "space-xl": "1.25rem", "space-lg": "1rem", "gutter": "1rem", "margin": "1rem" }, fontFamily: { "body-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "title-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"] }, fontSize: { "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "700" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }], "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "700" }], "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "800" }], "title-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }], "label-sm": ["10px", { "lineHeight": "14px", "fontWeight": "700" }], "title-md": ["16px", { "lineHeight": "22px", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }] } } } }</script></head><body class="bg-surface font-body-md text-body-md text-on-surface min-h-screen flex flex-col antialiased selection:bg-secondary/20 selection:text-secondary"><div class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl pt-safe"><div class="h-6 px-margin flex items-center justify-between text-on-surface"><span class="font-label-md text-label-md tracking-tight">9:41</span><div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px] leading-none">signal_cellular_alt</span><span class="material-symbols-outlined text-[15px] leading-none">wifi</span><span class="material-symbols-outlined text-[15px] leading-none">battery_full</span></div></div></div><main class="flex-1 w-full bg-surface pt-6 pb-safe px-margin flex flex-col"><div class="flex flex-col w-full pb-6">
+<!-- Top Bar Actions -->
+<div class="flex items-center justify-between py-2 mb-2">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[18px]">sim_card</span>
+</div>
+<span class="font-title-md text-title-md text-primary font-bold tracking-tight">SIMBari</span>
+</div>
+<button class="h-10 px-3 flex items-center justify-center font-label-lg text-label-lg text-outline hover:text-primary active:scale-95 transition-all" id="skip-btn" type="button">
+      Skip
+    </button>
+</div>
+<!-- Interactive Slide Stage -->
+<div class="relative w-full overflow-hidden flex flex-col">
+<!-- Carousel Slides Track -->
+<div class="flex transition-transform duration-500 ease-out w-full" id="slides-track">
+<!-- SLIDE 1: OPERATOR BUNDLES -->
+<div class="w-full flex-shrink-0 flex flex-col px-0.5">
+<!-- Visual Hero Area -->
+<div class="relative w-full h-[330px] rounded-xl bg-surface-container-low p-4 flex flex-col items-center justify-center overflow-hidden shadow-sm">
+<!-- Subtle Radial Ambient Glow -->
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/10 via-secondary-container/10 to-transparent pointer-events-none"></div>
+<!-- Central Graphic: Stylized Floating SIM & Operator Offer Badges -->
+<div class="relative w-full max-w-[290px] h-[250px] flex items-center justify-center">
+<!-- Floating Decorative Element: Teletalk/Airtel Micro Pod -->
+<div class="absolute top-1 left-2 z-10 bg-surface-container-lowest px-2.5 py-1.5 rounded-full shadow-md flex items-center gap-1.5 animate-bounce" style="animation-duration: 3.5s;">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary-fixed-dim"></span>
+<span class="font-label-sm text-label-sm text-on-surface">Teletalk 4G</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded-full bg-tertiary-container text-on-tertiary">৳49</span>
+</div>
+<!-- Floating Badge: Robi/Airtel Discount Tag -->
+<div class="absolute top-4 right-1 z-20 bg-secondary-container text-on-secondary px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_fire_department</span>
+<span class="font-label-sm text-label-sm uppercase font-extrabold tracking-wider">-30% OFF</span>
+</div>
+<!-- Central SIM Card Graphic Inspired by App Icon -->
+<div class="relative w-[178px] h-[230px] flex items-center justify-center filter drop-shadow-2xl">
+  <!-- Realistic SIM Card Body with standard 45-degree cut notch at top-right -->
+  <div class="relative w-full h-full bg-gradient-to-br from-primary via-[#001d5d] to-[#00123d] text-on-primary p-3.5 flex flex-col justify-between shadow-2xl border border-white/20 overflow-hidden" style="clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 0 100%); border-radius: 18px 0 18px 18px;">
+    <!-- Background subtle wave / circuit pattern -->
+    <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-surface-bright/10 rounded-full blur-xl pointer-events-none"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none"></div>
+
+    <!-- Header: Carrier Network & Bangladesh Flag Accent -->
+    <div class="w-full flex items-center justify-between z-10 pr-4">
+      <div class="flex items-center gap-1.5">
+        <!-- Bangladesh Flag Dot Accent -->
+        <div class="relative w-3.5 h-3.5 rounded-full bg-[#006a4e] flex items-center justify-center shadow-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#f42a41]"></span>
+        </div>
+        <span class="font-label-sm text-label-sm font-black tracking-wider text-white">BD 4G/5G</span>
+      </div>
+      <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/15 text-white/90 tracking-widest uppercase">SUPER SIM</span>
+    </div>
+
+    <!-- Center: Realistic Golden Metallic SIM Microchip Pad -->
+    <div class="relative my-auto flex flex-col items-center justify-center z-10">
+      <div class="w-20 h-16 rounded-lg p-1.5 relative flex items-center justify-center shadow-lg border border-amber-300/60" style="background: linear-gradient(135deg, #fce084 0%, #e5a93c 45%, #fdf0a6 55%, #c8891c 100%);">
+        <!-- Microchip Contact Segments -->
+        <div class="w-full h-full rounded border border-amber-800/40 relative flex items-center justify-center">
+          <!-- Center Contact Circle -->
+          <div class="w-6 h-6 rounded-full border border-amber-800/50 bg-amber-200/30 flex items-center justify-center shadow-inner">
+            <div class="w-2.5 h-2.5 rounded-full bg-amber-700/60"></div>
+          </div>
+          <!-- Horizontal Divider Lines -->
+          <div class="absolute inset-x-0 h-[1px] bg-amber-800/40"></div>
+          <!-- Vertical Divider Lines -->
+          <div class="absolute inset-y-0 w-[1px] bg-amber-800/40"></div>
+          <!-- Diagonal Circuit Traces -->
+          <div class="absolute top-1 left-1 w-2 h-[1px] bg-amber-800/40 -rotate-45"></div>
+          <div class="absolute top-1 right-1 w-2 h-[1px] bg-amber-800/40 rotate-45"></div>
+          <div class="absolute bottom-1 left-1 w-2 h-[1px] bg-amber-800/40 rotate-45"></div>
+          <div class="absolute bottom-1 right-1 w-2 h-[1px] bg-amber-800/40 -rotate-45"></div>
+        </div>
+      </div>
+      <!-- ICCID / Serial Mock Number -->
+      <div class="mt-1 text-[8px] font-mono tracking-widest text-white/60 font-semibold">8988 0100 4829 1934</div>
+    </div>
+
+    <!-- Bottom: Multi-Operator Bangladesh Telecom Badges & Insertion Arrow -->
+    <div class="w-full z-10 flex flex-col gap-1.5">
+      <div class="w-full flex items-center justify-between">
+        <div class="flex items-center gap-1 text-[10px] font-extrabold tracking-tight text-white/90">
+          <span class="text-sky-300">GP</span>
+          <span class="text-white/40">•</span>
+          <span class="text-red-400">ROBI</span>
+          <span class="text-white/40">•</span>
+          <span class="text-amber-400">BL</span>
+          <span class="text-white/40">•</span>
+          <span class="text-emerald-400">TT</span>
+        </div>
+        <!-- Directional Arrow -->
+        <div class="flex items-center text-white/70">
+          <span class="material-symbols-outlined text-[13px]">arrow_upward</span>
+        </div>
+      </div>
+      <!-- SIM Type Tag -->
+      <div class="w-full bg-white/10 backdrop-blur-md rounded py-0.5 px-2 flex items-center justify-between text-[9px] text-white/80 font-medium">
+        <span class="">Universal Nano/Micro</span>
+        <span class="font-bold text-secondary-container">Active</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Left Floating Offer Card (Banglalink) -->
+<div class="absolute bottom-6 -left-2 z-20 bg-surface-container-lowest p-2.5 rounded-xl shadow-md w-36 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-bold text-secondary">Banglalink</span>
+<span class="font-label-sm text-label-sm bg-secondary-fixed text-on-secondary-fixed px-1.5 py-0.5 rounded">Combo</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-primary leading-tight">25 GB</div>
+<div class="font-body-sm text-body-sm text-outline flex items-center justify-between">
+<span class="">500 Mins</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">৳398</span>
+</div>
+</div>
+<!-- Right Floating Super Internet Pack Badge -->
+<div class="absolute bottom-10 -right-2 z-20 bg-surface-container-lowest p-2.5 rounded-xl shadow-md w-36 flex flex-col gap-1">
+<div class="flex items-center gap-1 text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span class="font-label-sm text-label-sm font-extrabold uppercase">Super Pack</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-primary leading-tight">50 GB</div>
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-outline">30 Days</span>
+<span class="text-tertiary-container bg-tertiary-fixed font-bold px-1 rounded">Save ৳120</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Typography Block -->
+<div class="text-center mt-6 px-3">
+<h2 class="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">
+            Browse offers from all operators
+          </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
+            Compare exclusive internet, minute, and combo bundles across GP, Robi, BL, Teletalk &amp; Airtel at unbeatable rates.
+          </p>
+</div>
+</div>
+<!-- SLIDE 2: BKASH & MOBILE WALLETS -->
+<div class="w-full flex-shrink-0 flex flex-col px-0.5">
+<!-- Visual Hero Area -->
+<div class="relative w-full h-[330px] rounded-xl bg-surface-container-low p-4 flex flex-col items-center justify-center overflow-hidden shadow-sm">
+<div class="absolute inset-0 bg-gradient-to-tr from-secondary-container/10 via-primary/5 to-transparent pointer-events-none"></div>
+<!-- Realistic Phone MFS Mockup -->
+<div class="relative w-[270px] h-[250px] flex items-center justify-center">
+<!-- Background Payment Hub Card -->
+<div class="w-[230px] bg-surface-container-lowest rounded-2xl shadow-xl p-4 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary">
+<span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-on-surface">bKash Instant</div>
+<div class="font-body-sm text-body-sm text-outline">Verified Gateway</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-tertiary-container text-[20px]">check_circle</span>
+</div>
+<!-- Payment Amount Row -->
+<div class="bg-surface-container p-3 rounded-lg text-center">
+<div class="font-body-sm text-body-sm text-on-surface-variant">Recharge Amount</div>
+<div class="font-headline-lg text-headline-lg text-primary font-black mt-0.5">৳ 499.00</div>
+<div class="font-label-sm text-label-sm text-tertiary-container font-bold mt-1">Cashback ৳35 credited</div>
+</div>
+<!-- Wallet Badges -->
+<div class="grid grid-cols-3 gap-2 pt-1">
+<div class="bg-surface-container-high py-1.5 rounded text-center font-label-sm text-label-sm text-primary font-bold">bKash</div>
+<div class="bg-surface-container-high py-1.5 rounded text-center font-label-sm text-label-sm text-primary font-bold">Nagad</div>
+<div class="bg-surface-container-high py-1.5 rounded text-center font-label-sm text-label-sm text-primary font-bold">Rocket</div>
+</div>
+</div>
+<!-- Floating Security Badge -->
+<div class="absolute -top-1 right-2 bg-primary-container text-on-primary px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+<span class="font-label-sm text-label-sm font-bold">100% Encrypted</span>
+</div>
+<!-- Floating 1-Tap Success Chip -->
+<div class="absolute -bottom-2 left-4 bg-tertiary-container text-on-tertiary px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">touch_app</span>
+<span class="font-label-sm text-label-sm font-bold">Zero Gateway Fees</span>
+</div>
+</div>
+</div>
+<!-- Typography Block -->
+<div class="text-center mt-6 px-3">
+<h2 class="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">
+            Pay instantly with bKash
+          </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
+            Fast, secure one-tap checkout with bKash, Nagad, and cards. Earn guaranteed wallet cashback on every pack.
+          </p>
+</div>
+</div>
+<!-- SLIDE 3: SPEEDY ACTIVATION -->
+<div class="w-full flex-shrink-0 flex flex-col px-0.5">
+<!-- Visual Hero Area -->
+<div class="relative w-full h-[330px] rounded-xl bg-surface-container-low p-4 flex flex-col items-center justify-center overflow-hidden shadow-sm">
+<div class="absolute inset-0 bg-gradient-to-tr from-tertiary-fixed-dim/15 via-primary/5 to-transparent pointer-events-none"></div>
+<!-- Activation Speed Meter Illustration -->
+<div class="relative w-[280px] h-[250px] flex items-center justify-center">
+<div class="w-[240px] bg-surface-container-lowest rounded-2xl shadow-xl p-4 flex flex-col items-center text-center gap-3">
+<!-- Radial Progress Circular Simulation -->
+<div class="relative w-24 h-24 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+<path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-secondary-container" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="90, 100" stroke-linecap="round" stroke-width="3.8"></path>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-container text-[26px]">flash_on</span>
+<span class="font-label-sm text-label-sm text-on-surface font-black">2 MIN</span>
+</div>
+</div>
+<div>
+<div class="font-title-md text-title-md text-primary font-bold">Auto-Direct Flexiload</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Carrier API Connected</div>
+</div>
+<!-- Live Status Pill -->
+<div class="w-full py-1.5 px-3 rounded-full bg-tertiary-container/10 flex items-center justify-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary-container animate-ping"></span>
+<span class="font-label-sm text-label-sm text-tertiary-container font-bold">Pack Activated Successfully</span>
+</div>
+</div>
+<!-- Floating Ping Notification -->
+<div class="absolute top-2 left-0 bg-surface-container-lowest px-3 py-2 rounded-lg shadow-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">sms</span>
+<div class="text-left">
+<div class="font-label-sm text-label-sm text-on-surface font-bold">SMS Confirmation</div>
+<div class="font-label-sm text-label-sm text-outline">Sent to +88017...</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Typography Block -->
+<div class="text-center mt-6 px-3">
+<h2 class="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">
+            Get activated within minutes
+          </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
+            No vouchers or manual USSD codes required. Data and voice packs load directly to your SIM automatically.
+          </p>
+</div>
+</div>
+</div>
+<!-- Paged Dot Indicators -->
+<div class="flex items-center justify-center gap-2 mt-6 mb-8" id="dots-container">
+<!-- Active Pill -->
+<button aria-label="Slide 1" class="carousel-dot h-2 w-7 rounded-full bg-secondary-container transition-all duration-300" onclick="goToSlide(0)" type="button"></button>
+<!-- Inactive Dot -->
+<button aria-label="Slide 2" class="carousel-dot h-2 w-2 rounded-full bg-surface-container-highest hover:bg-outline-variant transition-all duration-300" onclick="goToSlide(1)" type="button"></button>
+<!-- Inactive Dot -->
+<button aria-label="Slide 3" class="carousel-dot h-2 w-2 rounded-full bg-surface-container-highest hover:bg-outline-variant transition-all duration-300" onclick="goToSlide(2)" type="button"></button>
+</div>
+</div>
+<!-- Bottom Interactive CTA Section -->
+<div class="w-full mt-auto flex flex-col gap-3 pt-2">
+<!-- Primary 52dp Action Button -->
+<button class="w-full h-[52px] bg-secondary-container hover:bg-secondary active:scale-[0.98] transition-all rounded-xl shadow-md text-on-secondary flex items-center justify-center gap-2 font-title-md text-title-md font-bold" id="next-cta-btn" type="button">
+<span id="btn-text" class="">Get Started</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+<!-- Secondary Login Footnote -->
+<div class="flex items-center justify-center py-2">
+<p class="font-body-md text-body-md text-on-surface-variant">
+        Already have an account? 
+        <button class="font-label-lg text-label-lg text-primary hover:underline ml-1 font-bold" type="button">
+          Log in
+        </button>
+</p>
+</div>
+</div>
+</div>
+<script>
+  let currentSlide = 0;
+  const totalSlides = 3;
+  const track = document.getElementById('slides-track');
+  const dots = document.querySelectorAll('.carousel-dot');
+  const ctaBtn = document.getElementById('next-cta-btn');
+  const btnText = document.getElementById('btn-text');
+
+  function updateSlideUI() {
+    if (track) {
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+    
+    dots.forEach((dot, index) => {
+      if (index === currentSlide) {
+        dot.className = 'carousel-dot h-2 w-7 rounded-full bg-secondary-container transition-all duration-300';
+      } else {
+        dot.className = 'carousel-dot h-2 w-2 rounded-full bg-surface-container-highest hover:bg-outline-variant transition-all duration-300';
+      }
+    });
+
+    if (btnText) {
+      if (currentSlide === totalSlides - 1) {
+        btnText.textContent = 'Explore Marketplace';
+      } else {
+        btnText.textContent = 'Continue';
+      }
+    }
+  }
+
+  function goToSlide(index) {
+    currentSlide = index;
+    updateSlideUI();
+  }
+
+  if (ctaBtn) {
+    ctaBtn.addEventListener('click', () => {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlideUI();
+      } else {
+        // Final Action
+        currentSlide = 0;
+        updateSlideUI();
+      }
+    });
+  }
+
+  const skipBtn = document.getElementById('skip-btn');
+  if (skipBtn) {
+    skipBtn.addEventListener('click', () => {
+      currentSlide = totalSlides - 1;
+      updateSlideUI();
+    });
+  }
+
+  // Swipe support for fluid mobile ergonomics
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  if (track) {
+    track.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    track.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 45 && currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlideUI();
+      } else if (touchEndX - touchStartX > 45 && currentSlide > 0) {
+        currentSlide--;
+        updateSlideUI();
+      }
+    }, { passive: true });
+  }
+</script></main>
+
+</body></html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-variant": "#d3e4fe",
+            "on-surface": "#0b1c30",
+            "outline-variant": "#c5c5d3",
+            "surface-bright": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-background": "#0b1c30",
+            "background": "#f8f9ff",
+            "surface-container": "#e5eeff",
+            "primary": "#00236f",
+            "on-primary": "#ffffff",
+            "surface": "#f8f9ff",
+            "secondary": "#9d4300",
+            "bkash": "#E2136E",
+            "bkash-dark": "#b80d57",
+            "bkash-light": "#fde8f1"
+          },
+          fontFamily: {
+            "body": ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    @layer base {
+      html, body {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      body {
+        overscroll-behavior: none;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .animate-blink {
+      animation: blink 1s infinite;
+    }
+  </style>
+</head>
+<body class="bg-gray-900/60 font-body text-on-surface antialiased select-none flex flex-col h-full w-full justify-between backdrop-blur-md pt-safe pb-safe">
+<!-- Background Dim / App backdrop preview container -->
+<div class="fixed inset-0 -z-10 bg-[#0f172a]/70 backdrop-blur-sm pointer-events-none"></div>
+<!-- Main Container -->
+<main class="flex-1 flex flex-col justify-between w-full max-w-md mx-auto h-full overflow-hidden">
+<!-- Top Spacer / Dismiss backdrop area -->
+<div class="w-full flex-1 flex flex-col justify-center px-4 py-3 min-h-[40px]">
+<!-- Official bKash Gateway Modal Card -->
+<div class="w-full bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col border border-white/20 transform transition-all">
+<!-- Top Official Header: bKash Logo -->
+<div class="w-full bg-white py-3 px-4 flex items-center justify-center border-b border-gray-100 shadow-xs relative">
+<img alt="bKash" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB2Tuq3AGMhNnpUSkzl7yw2lPy6TL3iBG5EXn7dpkjmNWcJGltYC_Va3t7NPGtAnVBANf2XpUtdhMPlhsILx6C1gk5tAGt53-51l98dIfF_Xsa0jeZ-OMKc0y9KExEpyATbDM6Q1f6d8FE2qnY_CTXhpPs-jeG0GL2T_LOdGWtRgvzjYnD1Yrx0Qc1ug_mv7G7XdhwpbXH7YhHsq058AFvYaa5E3MYX5lt05EC8X-Jp4ExjPs99bt4Yu2iZUK15Gm00A">
+</div>
+<!-- Merchant & Amount Row -->
+<div class="w-full bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100">
+<div class="flex items-center space-x-2.5">
+<div class="w-9 h-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+<span class="font-extrabold text-amber-600 text-xs tracking-tight">BL</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[13px] font-bold text-gray-800 leading-tight">OfferHut Recharge</span>
+<span class="text-[11px] text-gray-400 font-medium leading-tight">Banglalink 019 ****** 981</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[9px] uppercase font-bold text-gray-400 tracking-wider">Amount</span>
+<span class="text-[17px] font-extrabold text-[#E2136E] leading-none">৳498</span>
+</div>
+</div>
+<!-- Timer Countdown Strip -->
+<div class="w-full bg-rose-50/70 px-4 py-1.5 flex items-center justify-between border-b border-rose-100/60 text-xs">
+<div class="flex items-center space-x-1.5 text-rose-700 font-medium">
+<span class="material-symbols-outlined text-rose-600 text-[15px]">schedule</span>
+<span class="text-[11px] font-semibold">Payment expires in:</span>
+</div>
+<span class="font-bold text-rose-700 font-mono text-[12px]" id="session-countdown">08:45</span>
+</div>
+<!-- Signature bKash Pink Gateway Body -->
+<div class="w-full bg-[#E2136E] text-white px-5 pt-5 pb-4 flex flex-col items-center relative">
+<!-- Background Subtle Geometric Origami shapes -->
+<div class="absolute -right-6 -bottom-6 w-28 h-28 rounded-full bg-white/5 pointer-events-none"></div>
+<div class="absolute -left-6 -top-6 w-24 h-24 rounded-full bg-white/5 pointer-events-none"></div>
+<!-- Step Title -->
+<h2 class="text-base font-bold text-white text-center tracking-tight mb-3">
+            Enter bKash PIN
+          </h2>
+<!-- PIN Masked White Input Field -->
+<div class="w-full max-w-[280px] bg-white rounded-xl py-2 px-4 shadow-inner flex items-center justify-center space-x-2 border-2 border-pink-300/40 relative mb-2">
+<div class="flex items-center space-x-2 font-mono text-2xl font-black text-gray-800 tracking-widest">
+<span class="text-[#E2136E]">●</span>
+<span class="text-[#E2136E]">●</span>
+<span class="text-[#E2136E]">●</span>
+<span class="inline-block w-0.5 h-6 bg-[#E2136E] animate-blink mx-0.5"></span>
+<span class="text-gray-300">○</span>
+<span class="text-gray-300">○</span>
+</div>
+</div>
+<!-- Helpful Advice / Notice Link -->
+<div class="flex items-center justify-center space-x-1 text-white/90 text-[11px] font-medium mb-4">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+<span>Never share PIN. Forgot PIN? Call 16247</span>
+</div>
+<!-- Dual Action Buttons inside Magenta Card -->
+<div class="w-full grid grid-cols-2 gap-3 pt-1">
+<button class="w-full py-2.5 px-3 bg-white/15 hover:bg-white/20 active:scale-[0.98] border border-white/40 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all text-center flex items-center justify-center shadow-xs" type="button">
+              CLOSE
+            </button>
+<button class="w-full py-2.5 px-3 bg-white hover:bg-white/95 active:scale-[0.98] text-[#E2136E] font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-md transition-all text-center flex items-center justify-center" type="button">
+              CONFIRM
+            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Official Dark bKash Secure Keypad -->
+<div class="w-full bg-[#181a20] border-t border-gray-800/80 pt-2 pb-2 px-3 shadow-2xl flex flex-col shrink-0">
+<!-- Keypad Header Security Strip -->
+<div class="flex items-center justify-between px-2 pb-2 text-[11px]">
+<div class="flex items-center space-x-1.5 text-gray-400 font-semibold tracking-wider text-[10px] uppercase">
+<span class="material-symbols-outlined text-gray-500 text-[13px]">dialpad</span>
+<span>bKash Secure Input</span>
+</div>
+<div class="flex items-center space-x-1 text-emerald-400 font-medium text-[10px]">
+<span class="material-symbols-outlined text-[13px] text-emerald-400" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span>Encrypted</span>
+</div>
+</div>
+<!-- Numeric Pad Grid -->
+<div class="grid grid-cols-3 gap-1.5 max-w-sm mx-auto w-full">
+<!-- Row 1 -->
+<button class="h-11 rounded-lg bg-[#242731] active:bg-[#2d313d] text-white text-xl font-bold flex items-center justify-center shadow-sm transition-colors cursor-pointer" type="button">
+          1
+        </button>
+<button class="h-11 rounded-lg bg-[#242731] active:bg-[#2d313d] text-white text-xl font-bold flex flex-col items-center justify-center shadow-sm transition-colors cursor-pointer" type="button">
+<span class="leading-none">2</span>
+<span class="text-[8px] text-gray-400 font-semibold tracking-widest mt-0.5">ABC</span>
+</button>
+<button class="h-11 rounded-lg bg-[#242731] active:bg-[#2d313d] text-white text-xl font-bold flex flex-col items-center justify-center shadow-sm transition-colors cursor-pointer" type="button">
+<span class="leading-none">3</span>
+<span class="text-[8px] text-gray-400 font-semibold tracking-widest mt-0.5">DEF</span>
+</button>
+<!-- Row 2 -->
+<button class="h-11 rounded-lg bg-[#242731] active:bg-[#2d313d] text-white text-xl font-bold flex flex-col items-center justify-center shadow-sm transition-colors cursor-pointer" type="button">
+<span class="leading-none">4</span>
+<span class="text-[8px] text-gray-400 font-semibold tracking-widest mt-0.5">GHI</span>
+</button>
+<button class="h-11 rounded-lg bg-[#242731] active:bg-[#2d313d] text-white text-xl font-bold flex flex-col items-center justify-center shadow-sm transition-colors cursor-pointer" type="button">
+<span class="leading-none">5</span>
+<span class="text-[8px] text-gray-400 font-semibold tracking-widest mt-0.5">JKL</span>
+</button>
+<button class="h-11 rounded-lg bg-[#242731] active:bg-[#2d313d] text-white text-xl font-bold flex flex-col items-center justify-center shadow-sm transition-colors cursor-pointer" type="button">
+<span class="leading-none">6</span>
+<span class="text-[8px] text-gray-400 font-semibold tracking-widest mt-0.5">MNO</span>
+</button>
+<!-- Row 3 -->
+<button class="h-11 rounded-lg bg-[#242731] active:bg-[#2d313d] text-white text-xl font-bold flex flex-col items-center justify-center shadow-sm transition-colors cursor-pointer" type="button">
+<span class="leading-none">7</span>
+<span class="text-[8px] text-gray-400 font-semibold tracking-widest mt-0.5">PQRS</span>
+</button>
+<button class="h-11 rounded-lg bg-[#242731] active:bg-[#2d313d] text-white text-xl font-bold flex flex-col items-center justify-center shadow-sm transition-colors cursor-pointer" type="button">
+<span class="leading-none">8</span>
+<span class="text-[8px] text-gray-400 font-semibold tracking-widest mt-0.5">TUV</span>
+</button>
+<button class="h-11 rounded-lg bg-[#242731] active:bg-[#2d313d] text-white text-xl font-bold flex flex-col items-center justify-center shadow-sm transition-colors cursor-pointer" type="button">
+<span class="leading-none">9</span>
+<span class="text-[8px] text-gray-400 font-semibold tracking-widest mt-0.5">WXYZ</span>
+</button>
+<!-- Row 4 -->
+<button class="h-11 rounded-lg bg-[#1e2029] active:bg-[#272a36] text-gray-300 flex items-center justify-center shadow-sm transition-colors cursor-pointer" type="button">
+<span class="material-symbols-outlined text-[20px]">backspace</span>
+</button>
+<button class="h-11 rounded-lg bg-[#242731] active:bg-[#2d313d] text-white text-xl font-bold flex items-center justify-center shadow-sm transition-colors cursor-pointer" type="button">
+          0
+        </button>
+<button class="h-11 rounded-lg bg-[#E2136E] hover:bg-[#b80d57] active:scale-95 text-white font-black text-sm flex items-center justify-center shadow-md transition-all cursor-pointer uppercase tracking-wider" type="button">
+          CONFIRM
+        </button>
+</div>
+</div>
+</main>
+<script>
+    (function() {
+      let totalSeconds = 525; // 08:45
+      const timerElem = document.getElementById('session-countdown');
+      if (timerElem) {
+        setInterval(function() {
+          if (totalSeconds > 0) {
+            totalSeconds -= 1;
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            timerElem.textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+          }
+        }, 1000);
+      }
+    })();
+  </script>
+</body></html>
