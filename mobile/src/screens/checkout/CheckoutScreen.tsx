@@ -43,9 +43,8 @@ export const CheckoutScreen: React.FC<Props> = ({ route, navigation }) => {
   } = useOrder();
 
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>(paymentMethod || 'bkash');
-  const [phone, setPhone] = useState(recipientNumber || user?.phone_number || '01712-345678');
-  const [editPhoneModal, setEditPhoneModal] = useState(false);
-  const [tempPhone, setTempPhone] = useState(phone);
+  const [phone, setPhone] = useState(recipientNumber || '');
+  const [tempPhone, setTempPhone] = useState('');
 
   // Live countdown timer (e.g. 09:42 counting down)
   const [secondsLeft, setSecondsLeft] = useState(582); // 9 mins 42 secs
@@ -76,7 +75,7 @@ export const CheckoutScreen: React.FC<Props> = ({ route, navigation }) => {
     setRecipientNumber(validation.cleanNumber);
     setPaymentMethod(selectedMethod);
 
-    const orderId = `ORD-${Date.now().toString().slice(-6)}`;
+    const orderId = `#OH-${Math.floor(10000 + Math.random() * 90000)}`;
     const invoiceNumber = `INV-${Math.floor(100000 + Math.random() * 900000)}`;
 
     if (selectedMethod === 'bkash') {
@@ -84,17 +83,36 @@ export const CheckoutScreen: React.FC<Props> = ({ route, navigation }) => {
         orderId,
         amount: offer.offer_price,
         invoiceNumber,
+        offer,
+        recipientNumber: validation.cleanNumber,
       });
     } else if (selectedMethod === 'nagad') {
       navigation.navigate('NagadGateway', {
         orderId,
         amount: offer.offer_price,
         invoiceNumber,
+        offer,
+        recipientNumber: validation.cleanNumber,
       });
     } else {
       navigation.navigate('PaymentProcessing', {
         orderId,
         paymentMethod: selectedMethod,
+        order: {
+          id: orderId,
+          order_number: orderId,
+          user_id: user?.id || '10e080da-4293-4564-b107-2c3e33a9c480',
+          offer_id: offer.id,
+          phone_number: validation.cleanNumber,
+          operator_code: offer.operator_code,
+          amount: offer.offer_price,
+          total_paid: offer.offer_price,
+          payment_method: selectedMethod,
+          payment_status: 'completed',
+          order_status: 'completed',
+          created_at: new Date().toISOString(),
+          offer,
+        } as any,
       });
     }
   };
@@ -160,25 +178,49 @@ export const CheckoutScreen: React.FC<Props> = ({ route, navigation }) => {
             </View>
           </View>
 
-          {/* Recipient SIM Banner */}
-          <View style={styles.recipientBanner}>
-            <View style={styles.recipientLeft}>
-              <Ionicons name="call" size={18} color={colors.primaryContainer} />
-              <View>
-                <Text style={[typography.labelSm, styles.recipientLabel]}>Recipient SIM</Text>
-                <Text style={[typography.labelMd, styles.recipientNumber]}>{phone}</Text>
+          {/* Recipient SIM Direct Input Card */}
+          <View style={styles.recipientInputCard}>
+            <View style={styles.recipientInputHeader}>
+              <View style={styles.recipientInputLabelRow}>
+                <Ionicons name="call" size={17} color={colors.primaryContainer} />
+                <Text style={styles.recipientInputTitle}>রিচার্জ নম্বর (Recipient Mobile)</Text>
               </View>
+              {user?.phone_number ? (
+                <TouchableOpacity
+                  onPress={() => setPhone(user.phone_number)}
+                  style={styles.useMyNumberBtn}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.useMyNumberText}>আমার নম্বর দিন</Text>
+                </TouchableOpacity>
+              ) : null}
             </View>
-            <TouchableOpacity
-              style={styles.editPhoneBtn}
-              onPress={() => {
-                setTempPhone(phone);
-                setEditPhoneModal(true);
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="pencil" size={15} color={colors.primaryContainer} />
-            </TouchableOpacity>
+
+            <View style={styles.recipientInputFieldWrapper}>
+              <TextInput
+                style={styles.recipientTextInput}
+                placeholder="01XXXXXXXXX মোবাইল নম্বর লিখুন"
+                placeholderTextColor="#94a3b8"
+                keyboardType="phone-pad"
+                maxLength={11}
+                value={phone}
+                onChangeText={(val) => setPhone(val.replace(/[^0-9]/g, '').slice(0, 11))}
+              />
+              {phone.length > 0 && (
+                <TouchableOpacity
+                  onPress={() => setPhone('')}
+                  style={styles.clearPhoneBtn}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="close-circle" size={18} color="#94a3b8" />
+                </TouchableOpacity>
+              )}
+            </View>
+            <Text style={[styles.recipientHelperText, phone.length === 11 && styles.recipientHelperValid]}>
+              {phone.length === 11
+                ? '✓ ১১ ডিজিটের নম্বর সঠিক আছে'
+                : 'যে নম্বরে অফার চালু করতে চান সেই ১১ ডিজিটের মোবাইল নম্বর দিন'}
+            </Text>
           </View>
 
           {/* Price Calculation Breakdown */}
@@ -335,49 +377,7 @@ export const CheckoutScreen: React.FC<Props> = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Edit Phone Number Modal */}
-      <Modal
-        visible={editPhoneModal}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setEditPhoneModal(false)}
-      >
-        <View style={styles.editModalOverlay}>
-          <View style={styles.editModalContent}>
-            <Text style={[typography.titleMd, styles.editModalTitle]}>Edit Recipient Number</Text>
-            <TextInput
-              style={styles.editModalInput}
-              value={tempPhone}
-              onChangeText={setTempPhone}
-              placeholder="017XX-XXXXXX"
-              keyboardType="phone-pad"
-            />
-            <View style={styles.editModalActions}>
-              <TouchableOpacity
-                style={styles.modalCancelBtn}
-                onPress={() => setEditPhoneModal(false)}
-              >
-                <Text style={[typography.labelMd, styles.modalCancelText]}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.modalSaveBtn}
-                onPress={() => {
-                  const validation = validateBangladeshiPhoneNumber(tempPhone);
-                  if (!validation.isValid) {
-                    Alert.alert('ভুল মোবাইল নম্বর', validation.error || 'সঠিক ১১ ডিজিটের বাংলাদেশি নম্বর দিন।');
-                    return;
-                  }
-                  setPhone(validation.cleanNumber);
-                  setRecipientNumber(validation.cleanNumber);
-                  setEditPhoneModal(false);
-                }}
-              >
-                <Text style={[typography.labelMd, styles.modalSaveText]}>Save</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+
     </View>
   );
 };
@@ -497,40 +497,69 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 
-  /* Recipient SIM Banner */
-  recipientBanner: {
+  /* Recipient SIM Direct Input Card */
+  recipientInputCard: {
+    backgroundColor: '#eff4ff',
+    borderRadius: 14,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: '#dbeafe',
+    gap: 8,
+  },
+  recipientInputHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#eff4ff',
-    borderRadius: 12,
-    padding: spacing.sm,
   },
-  recipientLeft: {
+  recipientInputLabelRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 6,
   },
-  recipientLabel: {
-    color: '#444651',
-  },
-  recipientNumber: {
-    color: '#0b1c30',
+  recipientInputTitle: {
+    fontSize: 13,
     fontWeight: '700',
-    letterSpacing: 0.5,
+    color: '#0b1c30',
   },
-  editPhoneBtn: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: '#ffffff',
+  useMyNumberBtn: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+    backgroundColor: '#dbeafe',
+  },
+  useMyNumberText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#00236f',
+  },
+  recipientInputFieldWrapper: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: '#bfdbfe',
+    paddingHorizontal: 12,
+    height: 46,
+  },
+  recipientTextInput: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#0b1c30',
+    letterSpacing: 0.8,
+  },
+  clearPhoneBtn: {
+    padding: 4,
+  },
+  recipientHelperText: {
+    fontSize: 11,
+    color: '#64748b',
+    fontWeight: '500',
+  },
+  recipientHelperValid: {
+    color: '#16a34a',
+    fontWeight: '600',
   },
 
   /* Price Calculation */

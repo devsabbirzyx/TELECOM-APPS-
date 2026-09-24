@@ -55,7 +55,11 @@ export const Header: React.FC<HeaderProps> = ({
           ) : (
             <View style={styles.brandContainer}>
               <View style={styles.brandBadge}>
-                <Ionicons name="flash" size={16} color="#ffffff" />
+                <Image
+                  source={require('../../assets/icon.png')}
+                  style={styles.brandLogoImg}
+                  resizeMode="contain"
+                />
               </View>
               <Text style={[typography.headlineSm, styles.brandTitle]}>{title}</Text>
             </View>
@@ -150,10 +154,16 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 8,
-    backgroundColor: colors.primaryContainer,
+    backgroundColor: '#000000',
+    overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing.sm,
+  },
+  brandLogoImg: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
   },
   brandTitle: {
     color: colors.primaryContainer,

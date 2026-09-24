@@ -9,6 +9,7 @@ import {
   ScrollView,
   TextInput,
   Alert,
+  Image,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -107,7 +108,11 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.headerSection}>
           <View style={styles.logoWrapper}>
             <View style={styles.logoBox}>
-              <Ionicons name="home" size={32} color="#1e3a8a" />
+              <Image
+                source={require('../../../assets/icon.png')}
+                style={styles.logoImg}
+                resizeMode="cover"
+              />
             </View>
             <View style={styles.greenBadge}>
               <Ionicons name="checkmark" size={12} color="#ffffff" />
@@ -289,13 +294,19 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 20,
-    backgroundColor: '#eff4ff',
+    backgroundColor: '#000000',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOpacity: 0.06,
+    shadowOpacity: 0.15,
     shadowRadius: 8,
-    elevation: 2,
+    elevation: 3,
+    overflow: 'hidden',
+  },
+  logoImg: {
+    width: 72,
+    height: 72,
+    borderRadius: 20,
   },
   greenBadge: {
     position: 'absolute',

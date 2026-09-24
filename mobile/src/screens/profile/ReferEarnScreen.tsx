@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,23 +14,45 @@ import { rounded, spacing } from '../../theme/spacing';
 import { Header } from '../../components/Header';
 import { Button } from '../../components/Button';
 import { useAuth } from '../../context/AuthContext';
-import { MOCK_REFERRAL } from '../../services/api';
+import { api, MOCK_REFERRAL } from '../../services/api';
+import { ReferralData } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
 export const ReferEarnScreen: React.FC = () => {
+  const navigation = useNavigation<any>();
   const { user } = useAuth();
   const referralCode = user?.referral_code || 'TANVIR2026';
-  const [referralData] = useState(MOCK_REFERRAL);
+  const [referralData, setReferralData] = useState<ReferralData>(MOCK_REFERRAL);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    loadReferralStats();
+  }, []);
+
+  const loadReferralStats = async () => {
+    try {
+      setIsLoading(true);
+      const data = await api.getReferralData();
+      if (data) {
+        setReferralData(data);
+      }
+    } catch {
+      // Keep initial/fallback
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleCopy = () => {
-    Alert.alert('Copied!', `Referral code "${referralCode}" copied to clipboard.`);
+    Alert.alert('কপি হয়েছে!', `রেফারেল কোড "${referralCode}" কপি করা হয়েছে। বন্ধুদের সাথে শেয়ার করুন!`);
   };
 
   const handleShare = async () => {
     try {
       await Share.share({
-        message: `Use my referral code "${referralCode}" when signing up on Mobixa to get 10 GB Free Data + ৳50 signup bonus! Download here: https://mobixa.app`,
+        message: `Mobixa অ্যাপে জয়েন করুন এবং পান ৳৫০ রেফারেল বোনাস! একাউন্ট খোলার সময় আমার রেফারেল কোড "${referralCode}" ব্যবহার করুন। ডাউনলোড লিঙ্ক: https://mobixa.app`,
       });
     } catch (err) {
       console.warn(err);
@@ -39,7 +61,7 @@ export const ReferEarnScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="Refer & Earn" showBack onBack={() => {}} />
+      <Header title="Refer & Earn" showBack onBack={() => navigation.goBack()} />
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Banner */}
@@ -53,10 +75,10 @@ export const ReferEarnScreen: React.FC = () => {
             <Ionicons name="gift" size={32} color="#ffffff" />
           </View>
           <Text style={[typography.headlineSm, styles.bannerTitle]}>
-            Earn ৳50 Per Friend!
+            প্রতি রেফারে আয় করুন ৳২৫!
           </Text>
           <Text style={[typography.bodyMd, styles.bannerSub]}>
-            Invite your friends to Mobixa. When they register and recharge their first pack, you both get ৳50 cash bonus!
+            আপনার বন্ধুদের Mobixa-তে ইনভাইট করুন। তারা একাউন্ট খুললে পাবে ৳৫০ রেফারেল বোনাস এবং আপনি পাবেন সাথে সাথে ৳২৫ বোনাস!
           </Text>
         </LinearGradient>
 
@@ -85,38 +107,48 @@ export const ReferEarnScreen: React.FC = () => {
         <View style={styles.statsRow}>
           <View style={styles.statBox}>
             <Text style={[typography.headlineMd, styles.statVal]}>
-              ৳{referralData.total_earned}
+              ৳{referralData.total_earned || 0}
             </Text>
-            <Text style={[typography.bodySm, styles.statLbl]}>Total Earned</Text>
+            <Text style={[typography.bodySm, styles.statLbl]}>মোট আয় (Total Earned)</Text>
           </View>
           <View style={styles.statBox}>
             <Text style={[typography.headlineMd, styles.statVal]}>
-              {referralData.total_referrals}
+              {referralData.total_referrals || 0}
             </Text>
-            <Text style={[typography.bodySm, styles.statLbl]}>Friends Joined</Text>
+            <Text style={[typography.bodySm, styles.statLbl]}>রেফার সংখ্যা (Friends Joined)</Text>
           </View>
         </View>
 
         {/* Referred Friends List */}
-        <Text style={[typography.titleMd, styles.listTitle]}>Referred Friends</Text>
-        {referralData.referred_users.map((ref) => (
-          <View key={ref.id} style={styles.friendCard}>
-            <View style={styles.friendAvatar}>
-              <Text style={styles.avatarInitials}>{ref.name.charAt(0)}</Text>
-            </View>
-
-            <View style={styles.friendInfo}>
-              <Text style={[typography.titleMd, styles.friendName]}>{ref.name}</Text>
-              <Text style={[typography.bodySm, styles.friendDate]}>
-                Joined {ref.date} • {ref.phone_number}
-              </Text>
-            </View>
-
-            <View style={styles.rewardBadge}>
-              <Text style={styles.rewardText}>+৳{ref.reward}</Text>
-            </View>
+        <Text style={[typography.titleMd, styles.listTitle]}>রেফার করা বন্ধুদের তালিকা</Text>
+        {(!referralData.referred_users || referralData.referred_users.length === 0) ? (
+          <View style={styles.emptyCard}>
+            <Ionicons name="people-outline" size={32} color={colors.outline} style={{ marginBottom: 6 }} />
+            <Text style={[typography.bodyMd, { color: colors.outline }]}>এখনও কেউ আপনার কোড ব্যবহার করেনি।</Text>
+            <Text style={[typography.bodySm, { color: colors.outlineVariant, marginTop: 2 }]}>
+              কোড শেয়ার করে প্রতিটি রেফারে ২৫ টাকা আয় করুন!
+            </Text>
           </View>
-        ))}
+        ) : (
+          referralData.referred_users.map((ref) => (
+            <View key={ref.id} style={styles.friendCard}>
+              <View style={styles.friendAvatar}>
+                <Text style={styles.avatarInitials}>{ref.name ? ref.name.charAt(0) : 'F'}</Text>
+              </View>
+
+              <View style={styles.friendInfo}>
+                <Text style={[typography.titleMd, styles.friendName]}>{ref.name}</Text>
+                <Text style={[typography.bodySm, styles.friendDate]}>
+                  Joined {ref.date} • {ref.phone_number}
+                </Text>
+              </View>
+
+              <View style={styles.rewardBadge}>
+                <Text style={styles.rewardText}>+৳{ref.reward || 25}</Text>
+              </View>
+            </View>
+          ))
+        )}
       </ScrollView>
     </View>
   );
@@ -270,5 +302,15 @@ const styles = StyleSheet.create({
     color: colors.tertiaryContainer,
     fontWeight: '700',
     fontSize: 12,
+  },
+  emptyCard: {
+    backgroundColor: colors.surfaceContainerLowest,
+    borderRadius: rounded.xl,
+    padding: spacing.xl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: spacing.xs,
   },
 });

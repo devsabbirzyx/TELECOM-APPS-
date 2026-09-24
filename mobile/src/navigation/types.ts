@@ -12,11 +12,17 @@ export type RootStackParamList = {
 
   OfferDetails: { offer: Offer };
   Checkout: { offer: Offer };
-  PaymentProcessing: { orderId: string; paymentMethod: string };
-  BkashGateway: { orderId: string; amount: number; invoiceNumber: string };
-  NagadGateway: { orderId: string; amount: number; invoiceNumber: string };
+  PaymentProcessing: { orderId: string; paymentMethod: string; order?: Order };
+  BkashGateway: { orderId: string; amount: number; invoiceNumber: string; offer?: Offer; recipientNumber?: string };
+  NagadGateway: { orderId: string; amount: number; invoiceNumber: string; offer?: Offer; recipientNumber?: string };
   PaymentSuccess: { order: Order };
-  PaymentFailed: { reason?: string; orderId?: string };
+  PaymentFailed: {
+    reason?: string;
+    orderId?: string;
+    offer?: Offer;
+    recipientNumber?: string;
+    paymentMethod?: string;
+  };
 
   EditProfile: undefined;
   SavedNumbers: undefined;

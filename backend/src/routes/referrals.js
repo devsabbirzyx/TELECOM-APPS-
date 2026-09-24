@@ -15,17 +15,32 @@ router.get('/', requireAuth, async (req, res) => {
 
     const { data: referrals } = await supabaseAdmin
       .from('referrals')
-      .select('*')
-      .eq('referrer_id', req.user.id);
+      .select('*, referred:referred_id(id, full_name, phone_number)')
+      .eq('referrer_id', req.user.id)
+      .order('created_at', { ascending: false });
 
     const totalEarned = (referrals || []).reduce((acc, curr) => acc + Number(curr.bonus_amount || 0), 0);
+    const totalCount = (referrals || []).length;
+
+    const referredUsers = (referrals || []).map(r => ({
+      id: r.id,
+      name: r.referred?.full_name || 'Friend',
+      phone_number: r.referred?.phone_number ? r.referred.phone_number.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : '017****0000',
+      date: new Date(r.created_at).toISOString().split('T')[0],
+      status: r.status || 'Completed',
+      reward: Number(r.bonus_amount || 25),
+    }));
 
     res.json({
       success: true,
-      referralCode: profile?.referral_code || 'OHREFR',
-      shareUrl: `https://offerhut.com.bd/join?ref=${profile?.referral_code || 'OHREFR'}`,
-      totalReferrals: (referrals || []).length,
+      referral_code: profile?.referral_code || '',
+      referralCode: profile?.referral_code || '',
+      total_earned: totalEarned,
       totalEarnedBonus: totalEarned,
+      total_referrals: totalCount,
+      totalReferrals: totalCount,
+      reward_per_referral: 25,
+      referred_users: referredUsers,
       referralHistory: referrals || []
     });
   } catch (err) {

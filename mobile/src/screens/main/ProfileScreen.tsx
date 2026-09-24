@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Switch,
   Modal,
   Platform,
+  Alert,
 } from 'react-native';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
@@ -19,6 +20,8 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../navigation/types';
+import { useIsFocused } from '@react-navigation/native';
+import { supabase } from '../../services/supabase';
 
 type ProfileNavProp = StackNavigationProp<RootStackParamList>;
 
@@ -28,14 +31,51 @@ interface Props {
 
 export const ProfileScreen: React.FC<Props> = ({ navigation }) => {
   const { user, logout } = useAuth();
+  const isFocused = useIsFocused();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [language, setLanguage] = useState<'EN' | 'BN'>('EN');
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [activeOrdersCount, setActiveOrdersCount] = useState<number>(0);
+  const [savedSimsCount, setSavedSimsCount] = useState<number>(0);
 
-  const phone = user?.phone_number || '01712345678';
-  const formattedPhone = phone.startsWith('01')
-    ? `+880 ${phone.slice(1, 5)}-${phone.slice(5)}`
-    : `+880 ${phone}`;
+  useEffect(() => {
+    if (user?.id) {
+      // 1. Fetch active orders count
+      supabase
+        .from('orders')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .in('status', ['pending', 'processing'])
+        .then(({ count, error }) => {
+          if (!error && count !== null) {
+            setActiveOrdersCount(count);
+          } else {
+            setActiveOrdersCount(0);
+          }
+        });
+
+      // 2. Fetch saved numbers count
+      supabase
+        .from('saved_numbers')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .then(({ count, error }) => {
+          if (!error && count !== null) {
+            setSavedSimsCount(count);
+          } else {
+            setSavedSimsCount(0);
+          }
+        });
+    } else {
+      setActiveOrdersCount(0);
+      setSavedSimsCount(0);
+    }
+  }, [user?.id, isFocused]);
+
+  const phone = user?.phone_number || '';
+  const formattedPhone = phone
+    ? (phone.startsWith('01') ? `+880 ${phone.slice(1, 5)}-${phone.slice(5)}` : `+880 ${phone}`)
+    : 'নম্বর যুক্ত নেই';
 
   const handleConfirmLogout = async () => {
     setShowLogoutModal(false);
@@ -108,20 +148,25 @@ export const ProfileScreen: React.FC<Props> = ({ navigation }) => {
               <Text style={[typography.labelSm, styles.statusPillText]}>Verified Member</Text>
             </View>
 
-            {/* Quick Metrics Ribbon (Delight mini-dashboard) */}
-            <View style={styles.metricsRibbon}>
-              <View style={styles.metricCol}>
-                <Text style={styles.metricValPrimary}>৳ {(user?.balance || 450).toFixed(0)}</Text>
-                <Text style={[typography.labelSm, styles.metricLabel]}>Cashback</Text>
+            {/* Clean Balance & Referral Card (No arbitrary VIP/Level status) */}
+            <View style={styles.cleanBalanceCard}>
+              <View style={styles.balanceInfo}>
+                <Text style={styles.balanceSub}>Wallet Balance</Text>
+                <Text style={styles.balanceValue}>৳ {Number(user?.balance || 0).toFixed(2)}</Text>
               </View>
-              <View style={styles.metricCol}>
-                <Text style={styles.metricValSecondary}>14</Text>
-                <Text style={[typography.labelSm, styles.metricLabel]}>Recharges</Text>
-              </View>
-              <View style={styles.metricCol}>
-                <Text style={styles.metricValTertiary}>VIP</Text>
-                <Text style={[typography.labelSm, styles.metricLabel]}>Tier Level</Text>
-              </View>
+              {user?.referral_code ? (
+                <TouchableOpacity
+                  style={styles.refCodeChip}
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    Alert.alert('Referral Code', `আপনার রেফারেল কোড: ${user.referral_code}`);
+                  }}
+                >
+                  <Ionicons name="gift-outline" size={14} color="#ea580c" />
+                  <Text style={styles.refCodeText}>{user.referral_code}</Text>
+                  <Ionicons name="copy-outline" size={12} color="#94a3b8" />
+                </TouchableOpacity>
+              ) : null}
             </View>
           </View>
         </View>
@@ -183,9 +228,15 @@ export const ProfileScreen: React.FC<Props> = ({ navigation }) => {
                 <Text style={[typography.titleMd, styles.itemTitle]}>My Orders</Text>
               </View>
               <View style={styles.itemRightRow}>
-                <View style={styles.activeOrdersBadge}>
-                  <Text style={styles.activeOrdersText}>3 Active</Text>
-                </View>
+                {activeOrdersCount > 0 ? (
+                  <View style={styles.activeOrdersBadge}>
+                    <Text style={styles.activeOrdersText}>{activeOrdersCount} Active</Text>
+                  </View>
+                ) : (
+                  <View style={[styles.activeOrdersBadge, { backgroundColor: '#f1f5f9' }]}>
+                    <Text style={[styles.activeOrdersText, { color: '#64748b' }]}>0 Active</Text>
+                  </View>
+                )}
                 <Ionicons name="chevron-forward" size={22} color="#c5c5d3" />
               </View>
             </TouchableOpacity>
@@ -205,8 +256,10 @@ export const ProfileScreen: React.FC<Props> = ({ navigation }) => {
                 <Text style={[typography.titleMd, styles.itemTitle]}>Saved SIM Numbers</Text>
               </View>
               <View style={styles.itemRightRow}>
-                <View style={styles.simsCountBadge}>
-                  <Text style={styles.simsCountText}>4 SIMs</Text>
+                <View style={[styles.simsCountBadge, savedSimsCount === 0 && { backgroundColor: '#f1f5f9' }]}>
+                  <Text style={[styles.simsCountText, savedSimsCount === 0 && { color: '#64748b' }]}>
+                    {savedSimsCount} SIMs
+                  </Text>
                 </View>
                 <Ionicons name="chevron-forward" size={22} color="#c5c5d3" />
               </View>
@@ -512,42 +565,56 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 10,
   },
-  metricsRibbon: {
-    width: '100%',
+  cleanBalanceCard: {
     flexDirection: 'row',
-    backgroundColor: '#eff4ff',
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    marginTop: 16,
-  },
-  metricCol: {
-    flex: 1,
     alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#eff4ff',
+    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginTop: 16,
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#dbeafe',
   },
-  metricValPrimary: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#00236f',
-    lineHeight: 20,
+  balanceInfo: {
+    flexDirection: 'column',
   },
-  metricValSecondary: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#9d4300',
-    lineHeight: 20,
-  },
-  metricValTertiary: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#004b1d',
-    lineHeight: 20,
-  },
-  metricLabel: {
-    color: '#444651',
+  balanceSub: {
+    fontSize: 11,
+    color: '#64748b',
     fontWeight: '600',
-    fontSize: 10,
+    textTransform: 'uppercase',
+    letterSpacing: 0.4,
+  },
+  balanceValue: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#00236f',
     marginTop: 2,
+  },
+  refCodeChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#fed7aa',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  refCodeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#ea580c',
+    letterSpacing: 0.5,
   },
 
   /* 2. Menu Groups */

@@ -17,7 +17,7 @@ const OrderContext = createContext<OrderContextType | undefined>(undefined);
 
 export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null);
-  const [recipientNumber, setRecipientNumber] = useState<string>('01712345678');
+  const [recipientNumber, setRecipientNumber] = useState<string>('');
   const [operatorCode, setOperatorCode] = useState<OperatorCode>('gp');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('bkash');
 

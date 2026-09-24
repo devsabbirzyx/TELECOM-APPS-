@@ -85,9 +85,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
           // In background, fetch fresh profile and avatar directly from database
           if (parsed?.id) {
-            supabase
-              .rpc('get_user_profile', { p_user_id: parsed.id })
-              .then(({ data: rpcRes, error }) => {
+            (async () => {
+              try {
+                const { data: rpcRes, error } = await supabase.rpc('get_user_profile', { p_user_id: parsed.id });
                 if (!error && rpcRes && rpcRes.success && rpcRes.user) {
                   setUser((prev) => {
                     const freshUser = {
@@ -99,29 +99,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                     return freshUser as UserProfile;
                   });
                 } else {
-                  // Direct select fallback
-                  supabase
+                  const { data: profileData, error: profErr } = await supabase
                     .from('profiles')
                     .select('id, full_name, phone, avatar_url, referral_code')
                     .eq('id', parsed.id)
-                    .single()
-                    .then(({ data: profileData, error: profErr }) => {
-                      if (!profErr && profileData) {
-                        setUser((prev) => {
-                          const freshUser = {
-                            ...prev,
-                            ...profileData,
-                            phone_number: profileData.phone || prev?.phone_number,
-                            avatar_url: profileData.avatar_url !== undefined ? profileData.avatar_url : prev?.avatar_url,
-                          };
-                          saveStorageItem(USER_DATA_KEY, JSON.stringify(freshUser));
-                          return freshUser as UserProfile;
-                        });
-                      }
+                    .single();
+                  if (!profErr && profileData) {
+                    setUser((prev) => {
+                      const freshUser = {
+                        ...prev,
+                        ...profileData,
+                        phone_number: profileData.phone || prev?.phone_number,
+                        avatar_url: profileData.avatar_url !== undefined ? profileData.avatar_url : prev?.avatar_url,
+                      };
+                      saveStorageItem(USER_DATA_KEY, JSON.stringify(freshUser));
+                      return freshUser as UserProfile;
                     });
+                  }
                 }
-              })
-              .catch(() => {});
+              } catch {
+                // Background refresh ignore
+              }
+            })();
           }
         } catch {
           setUser(null);

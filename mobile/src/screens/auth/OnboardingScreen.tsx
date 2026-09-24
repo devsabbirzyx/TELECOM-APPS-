@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   ScrollView,
   Platform,
+  Image,
 } from 'react-native';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
@@ -35,9 +36,13 @@ export const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.topBar}>
           <View style={styles.brandRow}>
             <View style={styles.simIconBox}>
-              <Ionicons name="card" size={18} color="#ffffff" />
+              <Image
+                source={require('../../../assets/icon.png')}
+                style={styles.brandIconImg}
+                resizeMode="cover"
+              />
             </View>
-            <Text style={styles.brandTitle}>SIMBari</Text>
+            <Text style={styles.brandTitle}>Mobixa</Text>
           </View>
           <TouchableOpacity
             onPress={() => navigation.navigate('Login')}
@@ -203,9 +208,15 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 8,
-    backgroundColor: '#1e3a8a',
+    backgroundColor: '#000000',
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'hidden',
+  },
+  brandIconImg: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
   },
   brandTitle: {
     fontSize: 18,

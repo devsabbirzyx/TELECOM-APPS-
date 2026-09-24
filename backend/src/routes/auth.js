@@ -84,6 +84,38 @@ router.post('/verify-otp', async (req, res) => {
   }
 });
 
+// Validate Referral Code (Optional check before or during Sign Up)
+router.get('/validate-referral/:code', async (req, res) => {
+  try {
+    const code = req.params.code ? req.params.code.trim().toUpperCase() : '';
+    if (!code) {
+      return res.status(400).json({ valid: false, message: 'রেফারেল কোড দিন' });
+    }
+
+    const { data: profile, error } = await supabaseAdmin
+      .from('profiles')
+      .select('id, full_name, referral_code')
+      .eq('referral_code', code)
+      .single();
+
+    if (error || !profile) {
+      return res.status(404).json({
+        valid: false,
+        message: 'অবৈধ রেফারেল কোড। কোনো ব্যবহারকারী পাওয়া যায়নি।'
+      });
+    }
+
+    res.json({
+      valid: true,
+      code: profile.referral_code,
+      referrerName: profile.full_name,
+      message: `${profile.full_name}-এর রেফারেল কোড সক্রিয় আছে!`
+    });
+  } catch (err) {
+    res.status(500).json({ valid: false, message: 'ভেরিফিকেশন ব্যর্থ হয়েছে' });
+  }
+});
+
 // 3. Complete Sign Up (Phone + Password + Name + optional Referral Code)
 router.post(['/signup', '/register'], async (req, res) => {
   try {

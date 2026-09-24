@@ -29,3 +29,8 @@ Desktop.ini
 .idea/
 *.swp
 *.swo
+
+# Android / iOS Builds
+*.apk
+*.aab
+

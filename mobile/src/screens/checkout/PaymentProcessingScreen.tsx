@@ -23,16 +23,19 @@ interface Props {
 }
 
 export const PaymentProcessingScreen: React.FC<Props> = ({ route, navigation }) => {
-  const { orderId } = route.params;
+  const { orderId, paymentMethod, order } = route.params;
   const { recipientNumber } = useOrder();
 
   useEffect(() => {
-    // Simulate backend connection and trigger server error as requested
     const timer = setTimeout(() => {
       navigation.replace('PaymentFailed', {
-        reason: 'সার্ভারে একটি সমস্যা হচ্ছে, অনুগ্রহ করে আবার চেষ্টা করুন। (Server Error: 500)',
+        orderId,
+        paymentMethod: paymentMethod || 'bkash',
+        offer: order?.offer,
+        recipientNumber: order?.phone_number || recipientNumber,
+        reason: 'সিস্টেম আপডেটের কাজ চলছে, এখন পেমেন্টটি প্রসেস হয়নি। অনুগ্রহ করে অন্য মেথড ব্যবহার করুন।',
       });
-    }, 2000);
+    }, 1600);
 
     return () => clearTimeout(timer);
   }, []);

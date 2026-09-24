@@ -20,6 +20,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../navigation/types';
 
+import { useAuth } from '../../context/AuthContext';
+import { supabase } from '../../services/supabase';
+
 type SavedNavProp = StackNavigationProp<RootStackParamList, 'SavedNumbers'>;
 
 interface Props {
@@ -27,19 +30,41 @@ interface Props {
 }
 
 export const SavedNumbersScreen: React.FC<Props> = ({ navigation }) => {
-  const [numbers, setNumbers] = useState<SavedNumber[]>(MOCK_SAVED_NUMBERS);
+  const { user } = useAuth();
+  const [numbers, setNumbers] = useState<SavedNumber[]>([]);
   const { setRecipientNumber, setOperatorCode } = useOrder();
 
   useEffect(() => {
     loadNumbers();
-  }, []);
+  }, [user?.id]);
 
   const loadNumbers = async () => {
     try {
+      if (user?.id) {
+        const { data, error } = await supabase
+          .from('saved_numbers')
+          .select('*, operators(*)')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+
+        if (!error && data) {
+          setNumbers(
+            data.map((item: any) => ({
+              id: item.id,
+              user_id: item.user_id,
+              title: item.label || item.title || 'Saved SIM',
+              phone_number: item.phone_number,
+              operator_code: item.operator_id || 'gp',
+            }))
+          );
+          return;
+        }
+      }
+
       const res = await api.getSavedNumbers();
-      if (res && res.length) setNumbers(res);
+      setNumbers(Array.isArray(res) ? res : []);
     } catch {
-      // Keep mock
+      setNumbers([]);
     }
   };
 

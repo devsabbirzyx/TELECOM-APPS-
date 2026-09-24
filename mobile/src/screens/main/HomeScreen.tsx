@@ -17,7 +17,7 @@ import { OfferCard } from '../../components/OfferCard';
 import { BannerCarousel } from '../../components/BannerCarousel';
 import { ClaimFreeModal } from '../../components/ClaimFreeModal';
 import { api, MOCK_OPERATORS, MOCK_OFFERS } from '../../services/api';
-import { Offer, Operator, OperatorCode, OfferCategory } from '../../types';
+import { Offer, Operator, OperatorCode, OfferCategory, FreeClaimStatus } from '../../types';
 import { useOrder } from '../../context/OrderContext';
 import { Ionicons } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -37,6 +37,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [claimModalVisible, setClaimModalVisible] = useState(false);
+  const [claimStatus, setClaimStatus] = useState<FreeClaimStatus | null>(null);
 
   const { setSelectedOffer } = useOrder();
 
@@ -46,12 +47,14 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
   const loadData = async () => {
     try {
-      const [ops, offs] = await Promise.all([
+      const [ops, offs, claimRes] = await Promise.all([
         api.getOperators(),
         api.getOffers(),
+        api.getFreeClaimStatus().catch(() => null),
       ]);
       if (ops && ops.length) setOperators(ops);
       if (offs && offs.length) setOffers(offs);
+      if (claimRes?.claim) setClaimStatus(claimRes.claim);
     } catch {
       // Fallback to initial mock
     }
@@ -158,7 +161,10 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
         </View>
 
         {/* 10 GB Free Welcome Banner */}
-        <BannerCarousel onClaimPress={() => setClaimModalVisible(true)} />
+        <BannerCarousel
+          onClaimPress={() => setClaimModalVisible(true)}
+          claimStatus={claimStatus}
+        />
 
         {/* Popular Offers Header with Category Filter */}
         <View style={styles.offersSectionHeader}>
@@ -222,6 +228,10 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
       <ClaimFreeModal
         visible={claimModalVisible}
         onClose={() => setClaimModalVisible(false)}
+        claimStatus={claimStatus}
+        onClaimSuccess={() => {
+          loadData();
+        }}
         onBuyPack={() => {
           setClaimModalVisible(false);
           (navigation as any).navigate('OffersTab');

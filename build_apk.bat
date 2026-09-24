@@ -3,7 +3,7 @@ title Mobixa - Android APK Builder
 echo ===================================================
 echo       Mobixa / OfferHut - Android APK Builder
 echo ===================================================
-cd /d "%~dp0"
+cd /d "%~dp0mobile"
 
 echo [1/2] Checking EAS CLI login status...
 call npx eas whoami

@@ -10,8 +10,10 @@ import {
   TextInput,
   Alert,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
+import { api } from '../../services/api';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../navigation/types';
 import { Ionicons } from '@expo/vector-icons';
@@ -34,6 +36,9 @@ export const SignUpScreen: React.FC<Props> = ({ navigation }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [referralCode, setReferralCode] = useState('');
+  const [referralValidation, setReferralValidation] = useState<{ checked: boolean; valid: boolean; message?: string } | null>(null);
+  const [validatingRef, setValidatingRef] = useState(false);
   const [errors, setErrors] = useState<{
     fullName?: string;
     phoneNumber?: string;
@@ -44,6 +49,23 @@ export const SignUpScreen: React.FC<Props> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
 
   const detectedOperator = getOperatorFromPrefix(phoneNumber);
+
+  const handleCheckReferral = async (code: string) => {
+    const clean = code.trim().toUpperCase();
+    if (!clean) {
+      setReferralValidation(null);
+      return;
+    }
+    setValidatingRef(true);
+    try {
+      const res = await api.validateReferralCode(clean);
+      setReferralValidation({ checked: true, valid: res.valid, message: res.message });
+    } catch {
+      setReferralValidation({ checked: true, valid: false, message: 'রেফারেল কোড যাচাই করা যায়নি' });
+    } finally {
+      setValidatingRef(false);
+    }
+  };
 
   const handleRegister = async () => {
     const newErrors: typeof errors = {};
@@ -89,10 +111,16 @@ export const SignUpScreen: React.FC<Props> = ({ navigation }) => {
         full_name: fullName.trim(),
         phone_number: phoneValidation.cleanNumber,
         password,
+        referral_code: referralCode.trim() ? referralCode.trim().toUpperCase() : undefined,
       });
+
+      const successMessage = referralValidation?.valid
+        ? 'আপনার Mobixa অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে এবং রেফারেল বোনাস যুক্ত করা হয়েছে! এখন লগইন করুন।'
+        : 'আপনার Mobixa অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে! এখন লগইন করুন।';
+
       Alert.alert(
         'অভিনন্দন! 🎉',
-        'আপনার Mobixa অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে এবং ৫০ টাকা সাইন-আপ বোনাস ওয়ালেটে যোগ করা হয়েছে! এখন লগইন করুন।',
+        successMessage,
         [
           {
             text: 'লগইন করুন',
@@ -126,7 +154,11 @@ export const SignUpScreen: React.FC<Props> = ({ navigation }) => {
             <Ionicons name="arrow-back" size={20} color="#ffffff" />
           </TouchableOpacity>
           <View style={styles.topCardLogo}>
-            <Ionicons name="home" size={26} color="#f97316" />
+            <Image
+              source={require('../../../assets/icon.png')}
+              style={styles.topCardLogoImg}
+              resizeMode="cover"
+            />
           </View>
           <View style={styles.offerhutBadge}>
             <View style={styles.orangeDot} />
@@ -291,6 +323,57 @@ export const SignUpScreen: React.FC<Props> = ({ navigation }) => {
             {errors.confirmPassword ? <Text style={styles.inlineError}>{errors.confirmPassword}</Text> : null}
           </View>
 
+          {/* Referral Code (Optional) */}
+          <View style={styles.fieldGroup}>
+            <View style={styles.labelRow}>
+              <Text style={styles.fieldLabel}>Referral Code (Optional) / রেফারেল কোড</Text>
+              <Text style={styles.optionalTag}>বোনাস সুবিধা</Text>
+            </View>
+            <View style={[styles.inputWrapper, referralValidation?.valid ? styles.inputSuccess : undefined]}>
+              <Ionicons
+                name="gift-outline"
+                size={18}
+                color={referralValidation?.valid ? '#16a34a' : '#757682'}
+                style={styles.inputIcon}
+              />
+              <TextInput
+                style={[styles.textInput, { textTransform: 'uppercase', letterSpacing: 1 }]}
+                placeholder="Enter referral code (e.g. MBXXXX)"
+                placeholderTextColor="#94a3b8"
+                value={referralCode}
+                autoCapitalize="characters"
+                maxLength={10}
+                onChangeText={(text) => {
+                  const upper = text.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                  setReferralCode(upper);
+                  if (upper.length >= 4) {
+                    handleCheckReferral(upper);
+                  } else {
+                    setReferralValidation(null);
+                  }
+                }}
+              />
+              {validatingRef ? (
+                <ActivityIndicator size="small" color="#f97316" />
+              ) : referralValidation ? (
+                <Ionicons
+                  name={referralValidation.valid ? 'checkmark-circle' : 'alert-circle'}
+                  size={18}
+                  color={referralValidation.valid ? '#16a34a' : '#dc2626'}
+                />
+              ) : null}
+            </View>
+            {referralValidation?.message ? (
+              <Text style={[styles.inlineHint, referralValidation.valid ? styles.hintSuccess : styles.hintError]}>
+                {referralValidation.message}
+              </Text>
+            ) : (
+              <Text style={styles.fieldHelper}>
+                বন্ধুর রেফারেল কোড থাকলে ব্যবহার করুন এবং বিশেষ বোনাস উপভোগ করুন।
+              </Text>
+            )}
+          </View>
+
           {/* Terms Checkbox */}
           <TouchableOpacity
             style={styles.termsRow}
@@ -398,10 +481,16 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 14,
-    backgroundColor: '#1e3a8a',
+    backgroundColor: '#000000',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
+    overflow: 'hidden',
+  },
+  topCardLogoImg: {
+    width: 48,
+    height: 48,
+    borderRadius: 14,
   },
   offerhutBadge: {
     flexDirection: 'row',
@@ -667,6 +756,10 @@ const styles = StyleSheet.create({
     borderColor: '#ba1a1a',
     borderWidth: 1.5,
   },
+  inputSuccess: {
+    borderColor: '#16a34a',
+    borderWidth: 1.5,
+  },
   inlineError: {
     fontSize: 11,
     color: '#ba1a1a',
@@ -674,4 +767,33 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginLeft: 4,
   },
+  optionalTag: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#f97316',
+    backgroundColor: '#fff7ed',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  inlineHint: {
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: 4,
+    marginLeft: 4,
+  },
+  hintSuccess: {
+    color: '#16a34a',
+  },
+  hintError: {
+    color: '#ba1a1a',
+  },
+  fieldHelper: {
+    fontSize: 11,
+    color: '#64748b',
+    marginTop: 4,
+    marginLeft: 4,
+    lineHeight: 15,
+  },
 });
+

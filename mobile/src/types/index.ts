@@ -114,6 +114,32 @@ export interface AppNotification {
   created_at: string;
 }
 
+export interface AddMoneyRequest {
+  id: string;
+  user_id: string;
+  amount: number;
+  payment_method: 'bkash' | 'nagad';
+  sender_number: string;
+  transaction_id: string;
+  status: 'pending' | 'approved' | 'rejected';
+  admin_notes?: string;
+  created_at: string;
+  approved_at?: string;
+}
+
+export interface FreeClaimStatus {
+  id?: string;
+  status: 'locked' | 'timer_active' | 'ready' | 'claimed';
+  timer_started_at?: string;
+  unlocks_at?: string;
+  seconds_remaining: number;
+  claimed_at?: string;
+  can_claim: boolean;
+  required_pack_title?: string;
+  offer_title?: string;
+  description?: string;
+}
+
 export interface ReferralData {
   referral_code: string;
   total_earned: number;
@@ -128,3 +154,5 @@ export interface ReferralData {
     reward: number;
   }>;
 }
+
+

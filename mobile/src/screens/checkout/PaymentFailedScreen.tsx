@@ -27,18 +27,25 @@ interface Props {
 }
 
 export const PaymentFailedScreen: React.FC<Props> = ({ route, navigation }) => {
-  const { reason = 'সার্ভারে একটি সমস্যা হচ্ছে, অনুগ্রহ করে আবার চেষ্টা করুন।' } =
-    route.params || {};
+  const {
+    orderId,
+    reason = 'সিস্টেম আপডেটের কাজ চলছে, এখন পেমেন্টটি প্রসেস হয়নি। অনুগ্রহ করে অন্য মেথড ব্যবহার করুন।',
+    offer,
+    recipientNumber: paramRecipient,
+    paymentMethod = 'bkash',
+  } = route.params || {};
 
   const { selectedOffer, recipientNumber } = useOrder();
+  const currentOffer = offer || selectedOffer;
+  const currentRecipient = paramRecipient || recipientNumber || '01XXXXXXXXX';
 
   const handleRetry = () => {
     navigation.goBack();
   };
 
   const handleChooseOtherMethod = () => {
-    if (selectedOffer) {
-      navigation.navigate('Checkout', { offer: selectedOffer });
+    if (currentOffer) {
+      navigation.navigate('Checkout', { offer: currentOffer });
     } else {
       navigation.navigate('MainTabs');
     }
@@ -56,23 +63,23 @@ export const PaymentFailedScreen: React.FC<Props> = ({ route, navigation }) => {
           <View style={styles.iconRing}>
             <View style={styles.iconPulse} />
             <View style={styles.iconCircle}>
-              <Ionicons name="close" size={38} color="#ffffff" />
+              <Ionicons name="alert-circle" size={38} color="#ffffff" />
             </View>
           </View>
 
-          <Text style={[typography.labelSm, styles.statusTag]}>PAYMENT UNSUCCESSFUL</Text>
-          <Text style={[typography.headlineMd, styles.title]}>পেমেন্ট ব্যর্থ হয়েছে</Text>
+          <Text style={[typography.labelSm, styles.statusTag]}>SYSTEM UPDATE NOTICE</Text>
+          <Text style={[typography.headlineMd, styles.title]}>পেমেন্ট প্রসেস হয়নি</Text>
           <Text style={[typography.bodyMd, styles.errorMessage]}>{reason}</Text>
 
           {/* Friendly Reassurance Banner */}
           <View style={styles.reassuranceBanner}>
-            <Ionicons name="shield-checkmark" size={22} color={colors.secondaryContainer} />
+            <Ionicons name="information-circle" size={22} color={colors.secondaryContainer} />
             <View style={styles.reassuranceTextCol}>
               <Text style={[typography.titleMd, styles.reassuranceTitle]}>
-                কোনো টাকা কাটা হয়নি
+                সার্ভার রক্ষণাবেক্ষণ চলছে
               </Text>
               <Text style={[typography.bodySm, styles.reassuranceSub]}>
-                আপনার ওয়ালেট ব্যালেন্স সম্পূর্ণ অপরিবর্তিত রয়েছে। সার্ভার সমস্যার কারণে পেমেন্টটি সম্পন্ন হতে পারেনি।
+                সিস্টেম আপডেটের কারণে গেটওয়ে রেসপন্স সাময়িকভাবে স্থগিত রয়েছে। অনুগ্রহ করে অন্য মেথড ব্যবহার করুন।
               </Text>
             </View>
           </View>
@@ -84,7 +91,7 @@ export const PaymentFailedScreen: React.FC<Props> = ({ route, navigation }) => {
             <Text style={[typography.labelMd, styles.cardHeaderTitle]}>Transaction Overview</Text>
             <View style={styles.cancelledBadge}>
               <View style={styles.cancelledDot} />
-              <Text style={[typography.labelSm, styles.cancelledText]}>FAILED</Text>
+              <Text style={[typography.labelSm, styles.cancelledText]}>MAINTENANCE</Text>
             </View>
           </View>
 
@@ -92,46 +99,43 @@ export const PaymentFailedScreen: React.FC<Props> = ({ route, navigation }) => {
             <View style={styles.detailRow}>
               <Text style={[typography.bodyMd, styles.detailLabel]}>Order ID</Text>
               <Text style={[typography.titleMd, styles.detailValue]}>
-                #OFH-{Date.now().toString().slice(-6)}
+                {orderId || `#OFH-${Date.now().toString().slice(-6)}`}
               </Text>
             </View>
 
             <View style={styles.detailRow}>
               <Text style={[typography.bodyMd, styles.detailLabel]}>Package Details</Text>
               <Text style={[typography.bodyMd, styles.detailValueBold]} numberOfLines={1}>
-                {selectedOffer?.title || '50 GB + 800 Mins Combo'}
+                {currentOffer?.title || 'স্পেশাল টেলিকম অফার'}
               </Text>
             </View>
 
             <View style={styles.detailRow}>
               <Text style={[typography.bodyMd, styles.detailLabel]}>Recipient SIM</Text>
               <Text style={[typography.bodyMd, styles.detailValue]}>
-                {recipientNumber || '01712-345678'}
+                {currentRecipient}
               </Text>
             </View>
 
             <View style={styles.detailRow}>
               <Text style={[typography.bodyMd, styles.detailLabel]}>Intended Amount</Text>
               <Text style={[typography.headlineSm, styles.amountValue]}>
-                ৳{selectedOffer?.offer_price || 498}
+                ৳{currentOffer?.offer_price || 499}
               </Text>
             </View>
 
             <View style={styles.detailRow}>
               <Text style={[typography.bodyMd, styles.detailLabel]}>Attempted Method</Text>
               <View style={styles.methodPill}>
-                <Image
-                  source={require('../../../assets/bkash_logo.png')}
-                  style={styles.methodLogo}
-                  resizeMode="contain"
-                />
-                <Text style={[typography.labelMd, styles.methodText]}>bKash</Text>
+                <Text style={[typography.labelMd, styles.methodText]}>
+                  {paymentMethod === 'nagad' ? 'Nagad' : 'bKash'}
+                </Text>
               </View>
             </View>
 
             <View style={styles.errorBox}>
-              <Text style={[typography.labelSm, styles.errorBoxLabel]}>System Response</Text>
-              <Text style={styles.errorCode}>ERR_SERVER_TIMEOUT: 500 INTERNAL_GATEWAY_ERROR</Text>
+              <Text style={[typography.labelSm, styles.errorBoxLabel]}>System Notice</Text>
+              <Text style={styles.errorCode}>NOTICE: SYSTEM_UPDATING_TRY_ANOTHER_METHOD</Text>
             </View>
           </View>
         </View>

@@ -8,6 +8,8 @@ import {
   SupportTicket,
   AppNotification,
   ReferralData,
+  AddMoneyRequest,
+  FreeClaimStatus,
 } from '../types';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
@@ -121,26 +123,35 @@ class ApiService {
     if (endpoint.startsWith('/profile')) {
       return MOCK_PROFILE as unknown as T;
     }
+    if (endpoint === '/wallet') {
+      return { success: true, balance: 0.0, transactions: [], addMoneyRequests: [] } as unknown as T;
+    }
     if (endpoint.startsWith('/wallet/balance')) {
-      return { balance: 450.0 } as unknown as T;
+      return { balance: 0.0 } as unknown as T;
     }
     if (endpoint.startsWith('/wallet/transactions')) {
-      return MOCK_TRANSACTIONS as unknown as T;
+      return [] as unknown as T;
+    }
+    if (endpoint.startsWith('/wallet/add-money-requests')) {
+      return { success: true, requests: [] } as unknown as T;
+    }
+    if (endpoint.startsWith('/offers/free-claim-status')) {
+      return { success: true, claim: { status: 'locked', seconds_remaining: 0, can_claim: false } } as unknown as T;
     }
     if (endpoint.startsWith('/saved-numbers')) {
-      return MOCK_SAVED_NUMBERS as unknown as T;
+      return [] as unknown as T;
     }
     if (endpoint.startsWith('/referrals')) {
       return MOCK_REFERRAL as unknown as T;
     }
     if (endpoint.startsWith('/notifications')) {
-      return MOCK_NOTIFICATIONS as unknown as T;
+      return [] as unknown as T;
     }
     if (endpoint.startsWith('/orders') && options.method === 'GET') {
-      return MOCK_ORDERS as unknown as T;
+      return [] as unknown as T;
     }
     if (endpoint.startsWith('/support/tickets')) {
-      return MOCK_TICKETS as unknown as T;
+      return [] as unknown as T;
     }
     return null;
   }
@@ -244,6 +255,14 @@ class ApiService {
     }
   }
 
+  async validateReferralCode(code: string): Promise<{ valid: boolean; code?: string; referrerName?: string; message: string }> {
+    try {
+      return await this.request(`/auth/validate-referral/${encodeURIComponent(code)}`);
+    } catch {
+      return { valid: false, message: 'রেফারেল কোড যাচাই করা যায়নি।' };
+    }
+  }
+
   async logout(): Promise<void> {
     await this.setToken(null);
   }
@@ -275,6 +294,25 @@ class ApiService {
     return this.request('/offers/claim-welcome', {
       method: 'POST',
       body: JSON.stringify({ phone_number: phoneNumber, operator }),
+    });
+  }
+
+  // 10GB Free Internet Claim & 12-Hour Timer System
+  async getFreeClaimStatus(): Promise<{ success: boolean; claim: FreeClaimStatus }> {
+    return this.request('/offers/free-claim-status');
+  }
+
+  async startFreeClaim(orderId?: string): Promise<{ success: boolean; message: string; claim: FreeClaimStatus }> {
+    return this.request('/offers/start-free-claim', {
+      method: 'POST',
+      body: JSON.stringify({ order_id: orderId }),
+    });
+  }
+
+  async claimFree10gb(data?: { recipient_phone?: string; operator_id?: string }): Promise<{ success: boolean; message: string; claim: any }> {
+    return this.request('/offers/claim-free-10gb', {
+      method: 'POST',
+      body: JSON.stringify(data || {}),
     });
   }
 
@@ -311,6 +349,10 @@ class ApiService {
   }
 
   // Wallet
+  async getWalletOverview(): Promise<{ success: boolean; balance: number; transactions: WalletTransaction[]; addMoneyRequests: AddMoneyRequest[] }> {
+    return this.request('/wallet');
+  }
+
   async getWalletBalance(): Promise<{ balance: number }> {
     return this.request('/wallet/balance');
   }
@@ -319,11 +361,24 @@ class ApiService {
     return this.request('/wallet/transactions');
   }
 
-  async addMoney(amount: number, method: string): Promise<{ payment_url: string }> {
+  async submitAddMoney(data: {
+    amount: number;
+    payment_method: 'bkash' | 'nagad';
+    sender_number: string;
+    transaction_id: string;
+  }): Promise<{ success: boolean; message: string; request?: AddMoneyRequest }> {
     return this.request('/wallet/add-money', {
       method: 'POST',
-      body: JSON.stringify({ amount, method }),
+      body: JSON.stringify(data),
     });
+  }
+
+  async getAddMoneyRequests(): Promise<{ success: boolean; requests: AddMoneyRequest[] }> {
+    return this.request('/wallet/add-money-requests');
+  }
+
+  async getPaymentMethods(): Promise<{ success: boolean; methods: any[] }> {
+    return this.request('/wallet/payment-methods');
   }
 
   // Profile
@@ -431,7 +486,7 @@ export const MOCK_OPERATORS: Operator[] = [
 
 export const MOCK_OFFERS: Offer[] = [
   {
-    id: 'off-1',
+    id: '7fdbfb39-278f-4ef3-b780-5f692f4172db',
     operator_code: 'gp',
     operator_name: 'Grameenphone',
     title: '50 GB Internet + 1000 Mins',
@@ -450,7 +505,7 @@ export const MOCK_OFFERS: Offer[] = [
     terms: ['Auto-renewal available', '24/7 internet usage', 'Valid for all GP Prepaid SIMs'],
   },
   {
-    id: 'off-2',
+    id: '22330aee-c35c-4bbd-b8fa-cb251b1d66ac',
     operator_code: 'robi',
     operator_name: 'Robi',
     title: '40 GB High Speed Data',
@@ -468,7 +523,7 @@ export const MOCK_OFFERS: Offer[] = [
     terms: ['Valid on 4G network', 'Carry forward unused data'],
   },
   {
-    id: 'off-3',
+    id: '57ea323f-5465-4eaf-aa1f-da2f1cd4a1ba',
     operator_code: 'banglalink',
     operator_name: 'Banglalink',
     title: 'Drive Pack: 60 GB + 1200 Mins',
@@ -486,7 +541,7 @@ export const MOCK_OFFERS: Offer[] = [
     terms: ['Special retailer commission applied', 'Direct recharge to customer number'],
   },
   {
-    id: 'off-4',
+    id: 'f4c4bbb3-1411-4695-a9ef-89452e9c492d',
     operator_code: 'airtel',
     operator_name: 'Airtel',
     title: '25 GB + 500 Mins Unlimited',
@@ -503,7 +558,7 @@ export const MOCK_OFFERS: Offer[] = [
     is_active: true,
   },
   {
-    id: 'off-5',
+    id: '4d9b9524-bfd2-4672-831a-212bdaf1e884',
     operator_code: 'teletalk',
     operator_name: 'Teletalk',
     title: '30 GB Shadhinota Pack',
@@ -520,7 +575,7 @@ export const MOCK_OFFERS: Offer[] = [
     is_active: true,
   },
   {
-    id: 'off-6',
+    id: '9cd0c45a-8038-4999-972d-bc9707b2a906',
     operator_code: 'gp',
     operator_name: 'Grameenphone',
     title: 'Drive Offer: 80 GB Super Pack',
@@ -543,16 +598,12 @@ export const MOCK_PROFILE: UserProfile = {
   phone_number: '01712345678',
   full_name: 'Tanvir Hossain',
   email: 'tanvir.mobixa@gmail.com',
-  balance: 450.0,
+  balance: 0.0,
   referral_code: 'TANVIR2026',
   created_at: '2026-01-15T10:00:00Z',
 };
 
-export const MOCK_SAVED_NUMBERS: SavedNumber[] = [
-  { id: 'sn-1', user_id: 'usr-101', title: 'My Primary GP', phone_number: '01712345678', operator_code: 'gp' },
-  { id: 'sn-2', user_id: 'usr-101', title: "Mom's Banglalink", phone_number: '01987654321', operator_code: 'banglalink' },
-  { id: 'sn-3', user_id: 'usr-101', title: "Brother's Robi", phone_number: '01811223344', operator_code: 'robi' },
-];
+export const MOCK_SAVED_NUMBERS: SavedNumber[] = [];
 
 export const MOCK_TRANSACTIONS: WalletTransaction[] = [
   {
@@ -587,54 +638,19 @@ export const MOCK_TRANSACTIONS: WalletTransaction[] = [
   },
 ];
 
-export const MOCK_ORDERS: Order[] = [
-  {
-    id: 'ord-101',
-    order_number: 'ORD-849201',
-    user_id: 'usr-101',
-    offer_id: 'off-1',
-    phone_number: '01712345678',
-    operator_code: 'gp',
-    amount: 499,
-    discount_amount: 200,
-    cashback_amount: 50,
-    total_paid: 499,
-    payment_method: 'bkash',
-    payment_status: 'completed',
-    order_status: 'completed',
-    created_at: '2026-09-18T14:28:00Z',
-    offer: MOCK_OFFERS[0],
-  },
-  {
-    id: 'ord-102',
-    order_number: 'ORD-849188',
-    user_id: 'usr-101',
-    offer_id: 'off-4',
-    phone_number: '01811223344',
-    operator_code: 'airtel',
-    amount: 298,
-    discount_amount: 101,
-    cashback_amount: 20,
-    total_paid: 298,
-    payment_method: 'wallet',
-    payment_status: 'completed',
-    order_status: 'completed',
-    created_at: '2026-09-12T19:44:00Z',
-    offer: MOCK_OFFERS[3],
-  },
-];
+export const MOCK_ORDERS: Order[] = [];
 
 export const MOCK_REFERRAL: ReferralData = {
   referral_code: 'TANVIR2026',
-  total_earned: 250,
+  total_earned: 125,
   total_referrals: 5,
-  reward_per_referral: 50,
+  reward_per_referral: 25,
   referred_users: [
-    { id: 'ref-1', name: 'Rakib Hasan', phone_number: '017****1234', date: '2026-09-10', status: 'Completed', reward: 50 },
-    { id: 'ref-2', name: 'Nafis Ahmed', phone_number: '018****5678', date: '2026-09-12', status: 'Completed', reward: 50 },
-    { id: 'ref-3', name: 'Shakil Khan', phone_number: '019****9988', date: '2026-09-14', status: 'Completed', reward: 50 },
-    { id: 'ref-4', name: 'Farhan Kabir', phone_number: '016****4433', date: '2026-09-17', status: 'Completed', reward: 50 },
-    { id: 'ref-5', name: 'Sajid Islam', phone_number: '015****7766', date: '2026-09-19', status: 'Completed', reward: 50 },
+    { id: 'ref-1', name: 'Rakib Hasan', phone_number: '017****1234', date: '2026-09-10', status: 'Completed', reward: 25 },
+    { id: 'ref-2', name: 'Nafis Ahmed', phone_number: '018****5678', date: '2026-09-12', status: 'Completed', reward: 25 },
+    { id: 'ref-3', name: 'Shakil Khan', phone_number: '019****9988', date: '2026-09-14', status: 'Completed', reward: 25 },
+    { id: 'ref-4', name: 'Farhan Kabir', phone_number: '016****4433', date: '2026-09-17', status: 'Completed', reward: 25 },
+    { id: 'ref-5', name: 'Sajid Islam', phone_number: '015****7766', date: '2026-09-19', status: 'Completed', reward: 25 },
   ],
 };
 

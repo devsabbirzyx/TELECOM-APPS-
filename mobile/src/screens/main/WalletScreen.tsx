@@ -22,6 +22,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuth } from '../../context/AuthContext';
 
 type FilterType = 'all' | 'credits' | 'debits' | 'cashback';
 
@@ -29,86 +30,25 @@ interface DisplayTransaction {
   id: string;
   title: string;
   timestamp: string;
-  status: 'Settled' | 'Completed';
+  status: 'Settled' | 'Completed' | 'Pending' | 'Rejected';
   amount: number;
   type: 'credit' | 'debit';
   tag: 'Bonus' | 'Applied' | 'Cashback' | 'Refund' | 'Reward' | 'Deposit';
   icon: keyof typeof MaterialIcons.glyphMap;
   iconBg: string;
   iconColor: string;
+  trxId?: string;
 }
-
-const INITIAL_DISPLAY_TRANSACTIONS: DisplayTransaction[] = [
-  {
-    id: 'tx-1',
-    title: 'Referral Bonus - Rahim used your code',
-    timestamp: 'Today, 02:45 PM',
-    status: 'Settled',
-    amount: 50.0,
-    type: 'credit',
-    tag: 'Bonus',
-    icon: 'redeem',
-    iconBg: colors.surfaceContainerHigh,
-    iconColor: colors.tertiaryContainer,
-  },
-  {
-    id: 'tx-2',
-    title: 'Used on GP 50GB Drive Pack',
-    timestamp: 'Yesterday, 11:20 AM',
-    status: 'Completed',
-    amount: 100.0,
-    type: 'debit',
-    tag: 'Applied',
-    icon: 'local-offer',
-    iconBg: colors.errorContainer,
-    iconColor: colors.error,
-  },
-  {
-    id: 'tx-3',
-    title: 'Cashback - Banglalink Dhamaka Pack',
-    timestamp: '16 Sep 2026',
-    status: 'Settled',
-    amount: 70.0,
-    type: 'credit',
-    tag: 'Cashback',
-    icon: 'currency-exchange',
-    iconBg: colors.surfaceContainerHigh,
-    iconColor: colors.tertiaryContainer,
-  },
-  {
-    id: 'tx-4',
-    title: 'Service Delayed Auto-Refund',
-    timestamp: '14 Sep 2026',
-    status: 'Settled',
-    amount: 150.0,
-    type: 'credit',
-    tag: 'Refund',
-    icon: 'replay',
-    iconBg: colors.surfaceContainerHigh,
-    iconColor: colors.tertiaryContainer,
-  },
-  {
-    id: 'tx-5',
-    title: 'Welcome Signup Bonus',
-    timestamp: '10 Sep 2026',
-    status: 'Settled',
-    amount: 50.0,
-    type: 'credit',
-    tag: 'Reward',
-    icon: 'celebration',
-    iconBg: colors.surfaceContainerHigh,
-    iconColor: colors.tertiaryContainer,
-  },
-];
 
 export const WalletScreen: React.FC = () => {
   const navigation = useNavigation<any>();
   const insets = useSafeAreaInsets();
+  const { user } = useAuth();
 
-  const [balance, setBalance] = useState<number>(620.0);
-  const [cashbackEarned, setCashbackEarned] = useState<number>(450.0);
-  const [referralRewards, setReferralRewards] = useState<number>(170.0);
-  const [transactions, setTransactions] = useState<DisplayTransaction[]>(INITIAL_DISPLAY_TRANSACTIONS);
+  const [balance, setBalance] = useState<number>(0.0);
+  const [cashbackEarned, setCashbackEarned] = useState<number>(0.0);
+  const [referralRewards, setReferralRewards] = useState<number>(0.0);
+  const [transactions, setTransactions] = useState<DisplayTransaction[]>([]);
 
   // Filter state
   const [filterType, setFilterType] = useState<FilterType>('all');
@@ -119,6 +59,9 @@ export const WalletScreen: React.FC = () => {
   const [selectedPreset, setSelectedPreset] = useState<number>(200);
   const [customAmount, setCustomAmount] = useState<string>('200');
   const [selectedMethod, setSelectedMethod] = useState<'bkash' | 'nagad'>('bkash');
+  const [senderPhone, setSenderPhone] = useState<string>('');
+  const [transactionId, setTransactionId] = useState<string>('');
+  const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
   const [isDepositing, setIsDepositing] = useState<boolean>(false);
   const [successToast, setSuccessToast] = useState<string | null>(null);
 
@@ -128,12 +71,80 @@ export const WalletScreen: React.FC = () => {
 
   const loadWallet = async () => {
     try {
-      const balRes = await api.getWalletBalance();
-      if (balRes?.balance !== undefined) {
-        setBalance(balRes.balance);
+      const [walletRes, methodsRes] = await Promise.all([
+        api.getWalletOverview().catch(() => null),
+        api.getPaymentMethods().catch(() => null),
+      ]);
+
+      if (walletRes) {
+        setBalance(Number(walletRes.balance || 0));
+
+        let mappedList: DisplayTransaction[] = [];
+
+        // 1. Add Money requests (Pending / Approved / Rejected)
+        if (walletRes.addMoneyRequests && walletRes.addMoneyRequests.length) {
+          walletRes.addMoneyRequests.forEach((req: any) => {
+            const isPending = req.status === 'pending';
+            const isApproved = req.status === 'approved';
+
+            mappedList.push({
+              id: req.id,
+              title: `Add Money via ${req.payment_method === 'bkash' ? 'bKash' : 'Nagad'}`,
+              timestamp: new Date(req.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+              status: isPending ? 'Pending' : (isApproved ? 'Settled' : 'Rejected'),
+              amount: Number(req.amount),
+              type: 'credit',
+              tag: 'Deposit',
+              icon: isPending ? 'hourglass-empty' : (isApproved ? 'savings' : 'cancel'),
+              iconBg: isPending ? '#fef3c7' : (isApproved ? '#dcfce7' : '#fee2e2'),
+              iconColor: isPending ? '#d97706' : (isApproved ? '#16a34a' : '#dc2626'),
+              trxId: req.transaction_id,
+            });
+          });
+        }
+
+        // 2. Processed wallet transactions
+        if (walletRes.transactions && walletRes.transactions.length) {
+          let totalCb = 0;
+          let totalRef = 0;
+
+          walletRes.transactions.forEach((tx: any) => {
+            const amt = Number(tx.amount || 0);
+            if (tx.type === 'cashback') totalCb += amt;
+            if (tx.type === 'bonus') totalRef += amt;
+
+            mappedList.push({
+              id: tx.id,
+              title: tx.description || 'Wallet Transaction',
+              timestamp: new Date(tx.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+              status: 'Completed',
+              amount: amt,
+              type: tx.type === 'used' ? 'debit' : 'credit',
+              tag: tx.type === 'cashback' ? 'Cashback' : (tx.type === 'bonus' ? 'Bonus' : (tx.type === 'refund' ? 'Refund' : 'Deposit')),
+              icon: tx.type === 'used' ? 'local-offer' : (tx.type === 'cashback' ? 'currency-exchange' : 'savings'),
+              iconBg: tx.type === 'used' ? colors.errorContainer : colors.surfaceContainerHigh,
+              iconColor: tx.type === 'used' ? colors.error : colors.tertiaryContainer,
+            });
+          });
+
+          setCashbackEarned(totalCb);
+          setReferralRewards(totalRef);
+        }
+
+        setTransactions(mappedList);
+      } else {
+        // Fallback to balance endpoint
+        const balRes = await api.getWalletBalance().catch(() => null);
+        if (balRes?.balance !== undefined) {
+          setBalance(balRes.balance);
+        }
+      }
+
+      if (methodsRes && methodsRes.methods) {
+        setPaymentMethods(methodsRes.methods);
       }
     } catch {
-      // Keep mock balance
+      // Keep state
     }
   };
 
@@ -153,39 +164,50 @@ export const WalletScreen: React.FC = () => {
     }
   };
 
-  const handleConfirmAddMoney = () => {
+  const handleConfirmAddMoney = async () => {
     const amt = parseFloat(customAmount);
     if (isNaN(amt) || amt < 10) {
-      Alert.alert('Invalid Amount', 'Please enter a valid amount of at least ৳10.');
+      Alert.alert('ভুল পরিমাণ (Invalid Amount)', 'সর্বনিম্ন ১০ টাকা Add Money করতে হবে।');
+      return;
+    }
+
+    const cleanSender = senderPhone.replace(/[^0-9]/g, '');
+    if (!cleanSender || cleanSender.length !== 11) {
+      Alert.alert('প্রেরকের নম্বর দিন', 'আপনার ১১ ডিজিটের বিকাশ/নগদ নম্বর সঠিকভাবে দিন (যেমন: 017XXXXXXXX)।');
+      return;
+    }
+
+    const cleanTrx = transactionId.trim().toUpperCase();
+    if (!cleanTrx || cleanTrx.length < 6) {
+      Alert.alert('TrxID আবশ্যক', 'পেমেন্টের পর প্রাপ্ত Transaction ID (TrxID) দিন।');
       return;
     }
 
     setIsDepositing(true);
-    setTimeout(() => {
+    try {
+      const res = await api.submitAddMoney({
+        amount: amt,
+        payment_method: selectedMethod,
+        sender_number: cleanSender,
+        transaction_id: cleanTrx,
+      });
+
       setIsDepositing(false);
       setIsAddMoneyVisible(false);
+      setSenderPhone('');
+      setTransactionId('');
 
-      const newBalance = balance + amt;
-      setBalance(newBalance);
+      Alert.alert(
+        'রিকোয়েস্ট সফল! ⏳',
+        'আপনার Add Money রিকোয়েস্টটি সফলভাবে জমা হয়েছে এবং ভেরিফিকেশনের জন্য পেন্ডিং (Pending) রয়েছে। এডমিন ভেরিফাই করার পর ওয়ালেটে ব্যালেন্স যুক্ত হবে।',
+        [{ text: 'ঠিক আছে', onPress: () => loadWallet() }]
+      );
 
-      const newTx: DisplayTransaction = {
-        id: `tx-dep-${Date.now()}`,
-        title: `Wallet Top-up via ${selectedMethod === 'bkash' ? 'bKash' : 'Nagad'}`,
-        timestamp: 'Just now',
-        status: 'Settled',
-        amount: amt,
-        type: 'credit',
-        tag: 'Deposit',
-        icon: 'savings',
-        iconBg: colors.surfaceContainerHigh,
-        iconColor: colors.tertiaryContainer,
-      };
-
-      setTransactions([newTx, ...transactions]);
-
-      setSuccessToast(`৳${amt.toFixed(2)} added successfully via ${selectedMethod === 'bkash' ? 'bKash' : 'Nagad'}!`);
-      setTimeout(() => setSuccessToast(null), 4000);
-    }, 1000);
+      loadWallet();
+    } catch (err: any) {
+      setIsDepositing(false);
+      Alert.alert('ব্যর্থ হয়েছে', err.message || 'রিকোয়েস্ট জমা দেওয়া সম্ভব হয়নি। অনুগ্রহ করে পুনরায় চেষ্টা করুন।');
+    }
   };
 
   const handleShareReferral = async () => {
@@ -254,12 +276,23 @@ export const WalletScreen: React.FC = () => {
             onPress={() => navigation.navigate('ProfileTab')}
             activeOpacity={0.8}
           >
-            <Image
-              source={{
-                uri: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80',
-              }}
-              style={styles.profileAvatar}
-            />
+            {user?.avatar_url ? (
+              <Image
+                source={{ uri: user.avatar_url }}
+                style={styles.profileAvatar}
+              />
+            ) : (
+              <LinearGradient
+                colors={['#1e3a8a', '#2563eb']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={[styles.profileAvatar, styles.initialsAvatar]}
+              >
+                <Text style={styles.initialsAvatarText}>
+                  {user?.full_name ? user.full_name.trim().charAt(0).toUpperCase() : 'M'}
+                </Text>
+              </LinearGradient>
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -440,7 +473,11 @@ export const WalletScreen: React.FC = () => {
                               styles.txStatusBadge,
                               tx.status === 'Settled'
                                 ? styles.statusSettled
-                                : styles.statusCompleted,
+                                : (tx.status === 'Pending'
+                                    ? styles.statusPending
+                                    : (tx.status === 'Rejected'
+                                        ? styles.statusRejected
+                                        : styles.statusCompleted)),
                             ]}
                           >
                             <Text
@@ -448,12 +485,24 @@ export const WalletScreen: React.FC = () => {
                                 typography.labelSm,
                                 tx.status === 'Settled'
                                   ? styles.statusSettledText
-                                  : styles.statusCompletedText,
+                                  : (tx.status === 'Pending'
+                                      ? styles.statusPendingText
+                                      : (tx.status === 'Rejected'
+                                          ? styles.statusRejectedText
+                                          : styles.statusCompletedText)),
                               ]}
                             >
                               {tx.status}
                             </Text>
                           </View>
+                          {tx.trxId ? (
+                            <>
+                              <View style={styles.txMetaDot} />
+                              <Text style={[typography.bodySm, styles.txTrxText]}>
+                                Trx: {tx.trxId}
+                              </Text>
+                            </>
+                          ) : null}
                         </View>
                       </View>
                     </View>
@@ -557,17 +606,13 @@ export const WalletScreen: React.FC = () => {
         animationType="slide"
         onRequestClose={() => setIsAddMoneyVisible(false)}
       >
-        <TouchableOpacity
-          style={styles.modalBackdrop}
-          activeOpacity={1}
-          onPress={() => setIsAddMoneyVisible(false)}
-        >
-          <TouchableOpacity activeOpacity={1} style={styles.addMoneyModalCard}>
+        <View style={styles.modalBackdrop}>
+          <View style={styles.addMoneyModalCard}>
             <View style={styles.addMoneyHeader}>
               <View>
                 <Text style={[typography.titleLg, styles.addMoneyTitle]}>Add Money to Wallet</Text>
                 <Text style={[typography.bodySm, styles.addMoneySubtitle]}>
-                  Instant balance reload via bKash or Nagad
+                  টাকা পাঠিয়ে TrxID সাবমিট করুন, এডমিন ভেরিফাই করবে
                 </Text>
               </View>
               <TouchableOpacity
@@ -578,124 +623,209 @@ export const WalletScreen: React.FC = () => {
               </TouchableOpacity>
             </View>
 
-            {/* Quick Preset Amount Chips */}
-            <Text style={[typography.labelMd, styles.inputSectionLabel]}>SELECT AMOUNT</Text>
-            <View style={styles.presetsRow}>
-              {[100, 200, 500, 1000].map((amt) => {
-                const isSelected = selectedPreset === amt;
-                return (
-                  <TouchableOpacity
-                    key={amt}
-                    style={[styles.presetChip, isSelected && styles.presetChipSelected]}
-                    onPress={() => handleSelectPreset(amt)}
-                    activeOpacity={0.8}
-                  >
-                    <Text
-                      style={[
-                        typography.titleMd,
-                        isSelected ? styles.presetChipTextSelected : styles.presetChipText,
-                      ]}
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.addMoneyScrollContent}>
+              {/* Quick Preset Amount Chips */}
+              <Text style={[typography.labelMd, styles.inputSectionLabel]}>SELECT AMOUNT</Text>
+              <View style={styles.presetsRow}>
+                {[100, 200, 500, 1000].map((amt) => {
+                  const isSelected = selectedPreset === amt;
+                  return (
+                    <TouchableOpacity
+                      key={amt}
+                      style={[styles.presetChip, isSelected && styles.presetChipSelected]}
+                      onPress={() => handleSelectPreset(amt)}
+                      activeOpacity={0.8}
                     >
-                      ৳{amt}
+                      <Text
+                        style={[
+                          typography.titleMd,
+                          isSelected ? styles.presetChipTextSelected : styles.presetChipText,
+                        ]}
+                      >
+                        ৳{amt}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+
+              {/* Custom Amount Input */}
+              <View style={styles.amountInputContainer}>
+                <Text style={styles.currencySymbol}>৳</Text>
+                <TextInput
+                  style={styles.amountInput}
+                  keyboardType="numeric"
+                  value={customAmount}
+                  onChangeText={handleCustomAmountChange}
+                  placeholder="Enter amount"
+                  placeholderTextColor={colors.outline}
+                  maxLength={6}
+                />
+              </View>
+
+              {/* Payment Method Radio Selection */}
+              <Text style={[typography.labelMd, styles.inputSectionLabel]}>CHOOSE PAYMENT METHOD</Text>
+              <View style={styles.methodsContainer}>
+                {/* bKash */}
+                <TouchableOpacity
+                  style={[
+                    styles.methodCard,
+                    selectedMethod === 'bkash' && styles.methodCardSelectedBkash,
+                  ]}
+                  onPress={() => setSelectedMethod('bkash')}
+                  activeOpacity={0.85}
+                >
+                  <View style={styles.methodInfoLeft}>
+                    <View style={[styles.methodLogoBadge, { backgroundColor: '#d12053' }]}>
+                      <Text style={styles.methodLogoText}>bKash</Text>
+                    </View>
+                    <View>
+                      <Text style={[typography.titleMd, styles.methodName]}>bKash Personal</Text>
+                      <Text style={[typography.bodySm, styles.methodSub]}>Send Money • 0% Fee</Text>
+                    </View>
+                  </View>
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      selectedMethod === 'bkash' && styles.radioCircleSelectedBkash,
+                    ]}
+                  >
+                    {selectedMethod === 'bkash' && <View style={styles.radioDot} />}
+                  </View>
+                </TouchableOpacity>
+
+                {/* Nagad */}
+                <TouchableOpacity
+                  style={[
+                    styles.methodCard,
+                    selectedMethod === 'nagad' && styles.methodCardSelectedNagad,
+                  ]}
+                  onPress={() => setSelectedMethod('nagad')}
+                  activeOpacity={0.85}
+                >
+                  <View style={styles.methodInfoLeft}>
+                    <View style={[styles.methodLogoBadge, { backgroundColor: '#f7931e' }]}>
+                      <Text style={styles.methodLogoText}>Nagad</Text>
+                    </View>
+                    <View>
+                      <Text style={[typography.titleMd, styles.methodName]}>Nagad Personal</Text>
+                      <Text style={[typography.bodySm, styles.methodSub]}>Send Money • 0% Fee</Text>
+                    </View>
+                  </View>
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      selectedMethod === 'nagad' && styles.radioCircleSelectedNagad,
+                    ]}
+                  >
+                    {selectedMethod === 'nagad' && <View style={styles.radioDot} />}
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+              {/* Account details box */}
+              {(() => {
+                const activeMethod = paymentMethods.find((m: any) => m.id === selectedMethod) || {
+                  account_number: selectedMethod === 'bkash' ? '01886123456' : '01712987654',
+                  type: 'Send Money',
+                  instruction: 'উপরে দেওয়া নম্বরে Send Money করুন। এরপর প্রেরকের নম্বর ও TrxID দিন।'
+                };
+                return (
+                  <View style={styles.paymentAccountBox}>
+                    <View style={styles.paymentAccountHeader}>
+                      <Text style={[typography.labelSm, styles.paymentAccountLabel]}>
+                        SEND MONEY TO THIS NUMBER:
+                      </Text>
+                      <View style={styles.personalBadge}>
+                        <Text style={styles.personalBadgeText}>Personal</Text>
+                      </View>
+                    </View>
+
+                    <View style={styles.paymentNumberRow}>
+                      <Text style={[typography.headlineSm, styles.paymentNumberText]}>
+                        {activeMethod.account_number}
+                      </Text>
+                      <TouchableOpacity
+                        style={styles.copyNumberBtn}
+                        onPress={() => {
+                          Alert.alert('কপি হয়েছে!', `${activeMethod.account_number} কপি করা হয়েছে। আপনার পেমেন্ট অ্যাপে গিয়ে Send Money করুন।`);
+                        }}
+                        activeOpacity={0.7}
+                      >
+                        <Ionicons name="copy-outline" size={16} color={colors.primaryContainer} />
+                        <Text style={[typography.labelSm, styles.copyNumberText]}>Copy</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    <Text style={[typography.bodySm, styles.paymentInstructionText]}>
+                      ⚠️ উপরোক্ত {selectedMethod === 'bkash' ? 'বিকাশ' : 'নগদ'} নম্বরে ৳{customAmount || '0'} Send Money করে নিচের বক্সে আপনার মোবাইল নম্বর ও TrxID দিন।
                     </Text>
-                  </TouchableOpacity>
+                  </View>
                 );
-              })}
-            </View>
+              })()}
 
-            {/* Custom Amount Input */}
-            <View style={styles.amountInputContainer}>
-              <Text style={styles.currencySymbol}>৳</Text>
-              <TextInput
-                style={styles.amountInput}
-                keyboardType="numeric"
-                value={customAmount}
-                onChangeText={handleCustomAmountChange}
-                placeholder="Enter amount"
-                placeholderTextColor={colors.outline}
-                maxLength={6}
-              />
-            </View>
-
-            {/* Payment Method Radio Selection */}
-            <Text style={[typography.labelMd, styles.inputSectionLabel]}>CHOOSE PAYMENT METHOD</Text>
-            <View style={styles.methodsContainer}>
-              {/* bKash */}
-              <TouchableOpacity
-                style={[
-                  styles.methodCard,
-                  selectedMethod === 'bkash' && styles.methodCardSelectedBkash,
-                ]}
-                onPress={() => setSelectedMethod('bkash')}
-                activeOpacity={0.85}
-              >
-                <View style={styles.methodInfoLeft}>
-                  <View style={[styles.methodLogoBadge, { backgroundColor: '#d12053' }]}>
-                    <Text style={styles.methodLogoText}>bKash</Text>
-                  </View>
-                  <View>
-                    <Text style={[typography.titleMd, styles.methodName]}>bKash Online</Text>
-                    <Text style={[typography.bodySm, styles.methodSub]}>Instant • 0% Fee</Text>
-                  </View>
-                </View>
-                <View
-                  style={[
-                    styles.radioCircle,
-                    selectedMethod === 'bkash' && styles.radioCircleSelectedBkash,
-                  ]}
-                >
-                  {selectedMethod === 'bkash' && <View style={styles.radioDot} />}
-                </View>
-              </TouchableOpacity>
-
-              {/* Nagad */}
-              <TouchableOpacity
-                style={[
-                  styles.methodCard,
-                  selectedMethod === 'nagad' && styles.methodCardSelectedNagad,
-                ]}
-                onPress={() => setSelectedMethod('nagad')}
-                activeOpacity={0.85}
-              >
-                <View style={styles.methodInfoLeft}>
-                  <View style={[styles.methodLogoBadge, { backgroundColor: '#f7931e' }]}>
-                    <Text style={styles.methodLogoText}>Nagad</Text>
-                  </View>
-                  <View>
-                    <Text style={[typography.titleMd, styles.methodName]}>Nagad Direct</Text>
-                    <Text style={[typography.bodySm, styles.methodSub]}>Instant • 0% Fee</Text>
-                  </View>
-                </View>
-                <View
-                  style={[
-                    styles.radioCircle,
-                    selectedMethod === 'nagad' && styles.radioCircleSelectedNagad,
-                  ]}
-                >
-                  {selectedMethod === 'nagad' && <View style={styles.radioDot} />}
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            {/* Confirm Button */}
-            <TouchableOpacity
-              style={[
-                styles.confirmAddBtn,
-                isDepositing && { opacity: 0.7 },
-              ]}
-              onPress={handleConfirmAddMoney}
-              disabled={isDepositing}
-              activeOpacity={0.9}
-            >
-              <MaterialIcons name="account-balance-wallet" size={20} color="#ffffff" />
-              <Text style={[typography.titleMd, styles.confirmAddBtnText]}>
-                {isDepositing
-                  ? 'Processing Deposit...'
-                  : `Proceed to Pay ৳${customAmount || '0'}`}
+              {/* Sender Phone Number */}
+              <Text style={[typography.labelMd, styles.inputSectionLabel]}>
+                আপনার {selectedMethod === 'bkash' ? 'বিকাশ' : 'নগদ'} নম্বর (SENDER PHONE)
               </Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-        </TouchableOpacity>
+              <View style={styles.textInputBox}>
+                <Ionicons name="call-outline" size={18} color={colors.outline} style={{ marginRight: 8 }} />
+                <TextInput
+                  style={styles.singleLineInput}
+                  keyboardType="phone-pad"
+                  value={senderPhone}
+                  onChangeText={setSenderPhone}
+                  placeholder="01XXXXXXXXX"
+                  placeholderTextColor={colors.outline}
+                  maxLength={11}
+                />
+              </View>
+
+              {/* Transaction ID */}
+              <Text style={[typography.labelMd, styles.inputSectionLabel]}>
+                ট্রানজেকশন আইডি (TRANSACTION ID / TrxID)
+              </Text>
+              <View style={styles.textInputBox}>
+                <Ionicons name="receipt-outline" size={18} color={colors.outline} style={{ marginRight: 8 }} />
+                <TextInput
+                  style={styles.singleLineInput}
+                  value={transactionId}
+                  onChangeText={(text) => setTransactionId(text.toUpperCase())}
+                  placeholder="যেমন: BL49XQ7ABC"
+                  placeholderTextColor={colors.outline}
+                  autoCapitalize="characters"
+                  maxLength={24}
+                />
+              </View>
+
+              {/* Notice */}
+              <View style={styles.pendingNoticeBox}>
+                <Ionicons name="time-outline" size={16} color="#b45309" />
+                <Text style={styles.pendingNoticeText}>
+                  রিকোয়েস্ট জমা দেওয়ার পর এডমিন ভেরিফাই করে ব্যালেন্স যুক্ত করবেন। সরাসরি ব্যালেন্স যোগ হবে না।
+                </Text>
+              </View>
+
+              {/* Confirm Button */}
+              <TouchableOpacity
+                style={[
+                  styles.confirmAddBtn,
+                  isDepositing && { opacity: 0.7 },
+                ]}
+                onPress={handleConfirmAddMoney}
+                disabled={isDepositing}
+                activeOpacity={0.9}
+              >
+                <MaterialIcons name="send" size={18} color="#ffffff" />
+                <Text style={[typography.titleMd, styles.confirmAddBtnText]}>
+                  {isDepositing
+                    ? 'রিকোয়েস্ট পাঠানো হচ্ছে...'
+                    : `জমা দিন (Submit ৳${customAmount || '0'})`}
+                </Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </View>
       </Modal>
     </View>
   );
@@ -760,6 +890,15 @@ const styles = StyleSheet.create({
   profileAvatar: {
     width: '100%',
     height: '100%',
+  },
+  initialsAvatar: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  initialsAvatarText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '700',
   },
 
   toastContainer: {
@@ -1126,6 +1265,12 @@ const styles = StyleSheet.create({
   statusCompleted: {
     backgroundColor: colors.surfaceContainer,
   },
+  statusPending: {
+    backgroundColor: '#fef3c7',
+  },
+  statusRejected: {
+    backgroundColor: '#fee2e2',
+  },
   statusSettledText: {
     color: colors.tertiaryContainer,
     fontSize: 9,
@@ -1134,6 +1279,21 @@ const styles = StyleSheet.create({
   statusCompletedText: {
     color: colors.onSurfaceVariant,
     fontSize: 9,
+    fontWeight: '600',
+  },
+  statusPendingText: {
+    color: '#d97706',
+    fontSize: 9,
+    fontWeight: '700',
+  },
+  statusRejectedText: {
+    color: '#dc2626',
+    fontSize: 9,
+    fontWeight: '700',
+  },
+  txTrxText: {
+    fontSize: 10,
+    color: colors.outline,
     fontWeight: '600',
   },
   txRight: {
@@ -1220,13 +1380,115 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 
-  /* Add Money Modal */
   addMoneyModalCard: {
     backgroundColor: colors.surfaceContainerLowest,
     borderTopLeftRadius: rounded.xxl,
     borderTopRightRadius: rounded.xxl,
     padding: spacing.lg,
     paddingBottom: spacing.xxl,
+    maxHeight: '90%',
+  },
+  addMoneyScrollContent: {
+    paddingBottom: spacing.lg,
+  },
+  paymentAccountBox: {
+    backgroundColor: colors.surfaceContainerLow,
+    borderRadius: rounded.xl,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: spacing.md,
+  },
+  paymentAccountHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.xs,
+  },
+  paymentAccountLabel: {
+    color: colors.onSurfaceVariant,
+    fontWeight: '700',
+    fontSize: 10,
+    letterSpacing: 0.5,
+  },
+  personalBadge: {
+    backgroundColor: colors.surfaceContainerHigh,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  personalBadgeText: {
+    color: colors.primaryContainer,
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  paymentNumberRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 4,
+    marginBottom: spacing.xs,
+  },
+  paymentNumberText: {
+    color: colors.primaryContainer,
+    fontWeight: '800',
+    letterSpacing: 1,
+  },
+  copyNumberBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surfaceContainerLowest,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: rounded.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    gap: 4,
+  },
+  copyNumberText: {
+    color: colors.primaryContainer,
+    fontWeight: '700',
+  },
+  paymentInstructionText: {
+    color: colors.onSurfaceVariant,
+    fontSize: 11,
+    lineHeight: 16,
+  },
+  textInputBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surfaceContainerLowest,
+    borderRadius: rounded.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: spacing.md,
+    height: 48,
+    marginBottom: spacing.sm,
+  },
+  singleLineInput: {
+    flex: 1,
+    fontSize: 14,
+    color: colors.onSurface,
+    fontWeight: '600',
+  },
+  pendingNoticeBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fffbeb',
+    borderRadius: rounded.md,
+    borderWidth: 1,
+    borderColor: '#fde68a',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 8,
+    gap: 8,
+    marginTop: spacing.xs,
+    marginBottom: spacing.md,
+  },
+  pendingNoticeText: {
+    color: '#92400e',
+    fontSize: 11,
+    flex: 1,
+    lineHeight: 16,
   },
   addMoneyHeader: {
     flexDirection: 'row',
